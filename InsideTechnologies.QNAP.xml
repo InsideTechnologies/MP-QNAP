@@ -1,0 +1,1439 @@
+﻿<ManagementPack ContentReadable="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema" >
+  <Manifest>
+    <Identity>
+      <ID>InsideTechnologies.QNAP</ID>
+      <Version>1.0.0.1</Version>
+    </Identity>
+    <Name>InsideTechnologies.QNAP</Name>
+    <References>
+      <Reference Alias="MicrosoftSystemCenterNetworkDeviceLibrary71102260">
+        <ID>Microsoft.SystemCenter.NetworkDevice.Library</ID>
+        <Version>7.0.8560.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="DW">
+        <ID>Microsoft.SystemCenter.DataWarehouse.Library</ID>
+        <Version>7.1.10226.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="SNMP">
+        <ID>System.Snmp.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="NetworkLibrary">
+        <ID>System.NetworkManagement.Library</ID>
+        <Version>7.1.10226.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="Windows">
+        <ID>Microsoft.Windows.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="Perf">
+        <ID>System.Performance.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="NetworkMonitoring">
+        <ID>System.NetworkManagement.Monitoring</ID>
+        <Version>7.1.10226.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="Visualization">
+        <ID>Microsoft.SystemCenter.Visualization.Library</ID>
+        <Version>7.1.10226.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="System">
+        <ID>System.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="SC">
+        <ID>Microsoft.SystemCenter.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="Health">
+        <ID>System.Health.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+    </References>
+  </Manifest>
+  <TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Node" Hosted="false" Singleton="false" >
+        </ClassType>
+        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Processor" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Processor" Hosted="true" Singleton="false" />
+        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Interface" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Interface" Hosted="true" Singleton="false" />
+        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Memory" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Memory" Hosted="true" Singleton="false" />
+      </ClassTypes>
+    </EntityTypes>
+    <ModuleTypes>
+      <DataSourceModuleType ID="InsideTechnologies.NetworkDevice.QNAP.Discovery.DS" Accessibility="Public" Batching="false">
+        <Configuration>
+          <xsd:element minOccurs="1" name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="DeviceKey" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="IPAddress" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="Community" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="Version" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+		  <xsd:element minOccurs="1" name="DisplayName" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="Scheduler" TypeID="System!System.Discovery.Scheduler">
+                <Scheduler>
+                  <SimpleReccuringSchedule>
+                    <Interval>$Config/IntervalSeconds$</Interval>
+                    <SyncTime>$Config/SyncTime$</SyncTime>
+                  </SimpleReccuringSchedule>
+                  <ExcludeDates />
+                </Scheduler>
+              </DataSource>
+              <ProbeAction ID="Probe" TypeID="NetworkLibrary!System.NetworkManagement.SnmpProbe">
+                <IsWriteAction>false</IsWriteAction>
+                <IP>$Config/IPAddress$</IP>
+                <CommunityString>$Config/Community$</CommunityString>
+                <SnmpVarBinds>
+                  <SnmpVarBind>
+                    <OID>.1.3.6.1.2.1.1.2.0</OID>
+                    <Syntax>0</Syntax>
+                    <Value VariantType="8" />
+                  </SnmpVarBind>
+                </SnmpVarBinds>
+              </ProbeAction>
+              <ConditionDetection ID="MapToDiscovery" TypeID="System!System.Discovery.FilteredClassSnapshotDataMapper">
+			  <Expression>
+                  <SimpleExpression>
+                    <ValueExpression>
+                      <Value>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SystemObjectID$</Value>
+                    </ValueExpression>
+                    <Operator>Equal</Operator>
+                    <ValueExpression>
+                      <Value Type="String">.1.3.6.1.4.1.24681</Value>
+                    </ValueExpression>
+                  </SimpleExpression>
+                </Expression>
+                <ClassId>$MPElement[Name='InsideTechnologies.NetworkDevice.QNAP']$</ClassId>
+                <InstanceSettings>
+                  <Settings>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.Node']/DeviceKey$</Name>
+                      <Value>$Config/DeviceKey$</Value>
+                    </Setting>
+					<Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.Node']/sysName$</Name>
+                      <Value>$Config/DisplayName$</Value>
+                    </Setting>
+					<Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.Node']/Vendor$</Name>
+                      <Value>QNAP System</Value>
+                    </Setting>
+                  </Settings>
+                </InstanceSettings>
+              </ConditionDetection>
+            </MemberModules>
+            <Composition>
+              <Node ID="MapToDiscovery">
+                  <Node ID="Probe">
+                    <Node ID="Scheduler" />
+                  </Node>
+                </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.Discovery.Data</OutputType>
+      </DataSourceModuleType>
+      <DataSourceModuleType ID="InsideTechnologies.NetworkDevice.QNAP.Processor.Discovery.DS" Accessibility="Public" Batching="false">
+        <Configuration>
+          <xsd:element minOccurs="1" name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="Port" type="xsd:unsignedInt" default="161" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="IP" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="CommunityString" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="Version" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="DeviceKey" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="Scheduler" TypeID="System!System.Discovery.Scheduler">
+                <Scheduler>
+                  <SimpleReccuringSchedule>
+                    <Interval>$Config/IntervalSeconds$</Interval>
+                    <SyncTime>$Config/SyncTime$</SyncTime>
+                  </SimpleReccuringSchedule>
+                  <ExcludeDates />
+                </Scheduler>
+              </DataSource>
+              <ProbeAction ID="Probe" TypeID="NetworkLibrary!System.NetworkManagement.SnmpProbe">
+                <Walk>false</Walk>
+                <WalkReturnMultipleItems>false</WalkReturnMultipleItems>
+                <NoOfRetries>3</NoOfRetries>
+                <Timeout>500</Timeout>
+                <Port>$Config/Port$</Port>
+                <IsWriteAction>false</IsWriteAction>
+                <IP>$Config/IP$</IP>
+                <CommunityString>$Config/CommunityString$</CommunityString>
+                <Version>$Config/Version$</Version>
+                <SnmpVarBinds>
+                  <SnmpVarBind>
+                    <OID>.1.3.6.1.4.1.24681.1.3.1</OID>
+                    <Syntax>0</Syntax>
+                    <Value VariantType="8" />
+                  </SnmpVarBind>
+                </SnmpVarBinds>
+                <OutputOnError>false</OutputOnError>
+              </ProbeAction>
+              <ConditionDetection ID="MapToDiscovery" TypeID="System!System.Discovery.ClassSnapshotDataMapper">
+                <ClassId>$MPElement[Name='InsideTechnologies.NetworkDevice.QNAP.Processor']$</ClassId>
+                <InstanceSettings>
+                  <Settings>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.Node']/DeviceKey$</Name>
+                      <Value>$Config/DeviceKey$</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.LogicalDevice']/Key$</Name>
+                      <Value>.1.3.6.1.4.1.24681.1.2.1</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.LogicalDevice']/Index$</Name>
+                      <Value>2</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.LogicalDevice']/Description$</Name>
+                      <Value>Processor Load</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='System!System.Entity']/DisplayName$</Name>
+                      <Value>Processor</Value>
+                    </Setting>
+                  </Settings>
+                </InstanceSettings>
+              </ConditionDetection>
+            </MemberModules>
+            <Composition>
+              <Node ID="MapToDiscovery">
+                <Node ID="Probe">
+                  <Node ID="Scheduler" />
+                </Node>
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.Discovery.Data</OutputType>
+      </DataSourceModuleType>
+      <DataSourceModuleType ID="InsideTechnologies.NetworkDevice.QNAP.Memory.Discovery.DS" Accessibility="Public" Batching="false">
+        <Configuration>
+          <xsd:element minOccurs="1" name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="Port" type="xsd:unsignedInt" default="161" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="IP" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="CommunityString" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="Version" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="DeviceKey" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="Scheduler" TypeID="System!System.Discovery.Scheduler">
+                <Scheduler>
+                  <SimpleReccuringSchedule>
+                    <Interval>$Config/IntervalSeconds$</Interval>
+                    <SyncTime>$Config/SyncTime$</SyncTime>
+                  </SimpleReccuringSchedule>
+                  <ExcludeDates />
+                </Scheduler>
+              </DataSource>
+              <ProbeAction ID="Probe" TypeID="NetworkLibrary!System.NetworkManagement.SnmpProbe">
+                <Walk>false</Walk>
+                <WalkReturnMultipleItems>false</WalkReturnMultipleItems>
+                <NoOfRetries>3</NoOfRetries>
+                <Timeout>500</Timeout>
+                <Port>$Config/Port$</Port>
+                <IsWriteAction>false</IsWriteAction>
+                <IP>$Config/IP$</IP>
+                <CommunityString>$Config/CommunityString$</CommunityString>
+                <Version>$Config/Version$</Version>
+                <SnmpVarBinds>
+                  <SnmpVarBind>
+                    <OID>.1.3.6.1.4.1.24681.1.3.2.0</OID>
+                    <Syntax>0</Syntax>
+                    <Value VariantType="8" />
+                  </SnmpVarBind>
+                </SnmpVarBinds>
+                <OutputOnError>false</OutputOnError>
+              </ProbeAction>
+              <ConditionDetection ID="MapToDiscovery" TypeID="System!System.Discovery.ClassSnapshotDataMapper">
+                <ClassId>$MPElement[Name='InsideTechnologies.NetworkDevice.QNAP.Memory']$</ClassId>
+                <InstanceSettings>
+                  <Settings>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.Node']/DeviceKey$</Name>
+                      <Value>$Config/DeviceKey$</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.LogicalDevice']/Key$</Name>
+                      <Value>.1.3.6.1.4.1.24681.1.3.2.0</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.LogicalDevice']/Index$</Name>
+                      <Value>0</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.LogicalDevice']/Description$</Name>
+                      <Value>System Memory</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='System!System.Entity']/DisplayName$</Name>
+                      <Value>Memory</Value>
+                    </Setting>
+                  </Settings>
+                </InstanceSettings>
+              </ConditionDetection>
+            </MemberModules>
+            <Composition>
+              <Node ID="MapToDiscovery">
+                <Node ID="Probe">
+                  <Node ID="Scheduler" />
+                </Node>
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.Discovery.Data</OutputType>
+      </DataSourceModuleType>
+    </ModuleTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Discoveries>
+      <Discovery ID="InsideTechnologies.NetworkDevice.QNAP.Discovery" Enabled="true" Target="NetworkLibrary!System.NetworkManagement.Node" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="InsideTechnologies.NetworkDevice.QNAP" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="InsideTechnologies.NetworkDevice.QNAP.Discovery.DS">
+          <IntervalSeconds>120</IntervalSeconds>
+          <DeviceKey>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/DeviceKey$</DeviceKey>
+          <IPAddress>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</IPAddress>
+          <Community>$RunAs[Name="NetworkLibrary!System.NetworkManagement.Snmp.MonitoringAccount"]/CommunityString$</Community>
+          <Version>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</Version>
+		  <DisplayName>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/sysName$</DisplayName>
+        </DataSource>
+      </Discovery>
+    </Discoveries>
+    <Rules>
+      <Rule ID="InsideTechnologies.NetworkDevice.QNAP.ProcessorLoad.Rule" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>PerformanceCollection</Category>
+        <DataSources>
+          <DataSource ID="DS" TypeID="NetworkLibrary!System.NetworkManagement.SnmpPerformanceDataSource">
+            <Interval>300</Interval>
+            <NoOfRetries>3</NoOfRetries>
+            <Timeout>500</Timeout>
+            <Port>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/PortNumber$</Port>
+            <IP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</IP>
+            <Version>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</Version>
+            <SnmpVarBinds>
+              <SnmpVarBind>
+                <OID>1.3.6.1.4.1.24681.1.3.1.0</OID>
+                <Syntax>0</Syntax>
+                <Value VariantType="8" />
+              </SnmpVarBind>
+            </SnmpVarBinds>
+            <ObjectName>Snmp Performance Object</ObjectName>
+            <CounterName>$Data/SnmpVarBinds/SnmpVarBind[1]/OID$</CounterName>
+          </DataSource>
+        </DataSources>
+        <WriteActions>
+          <WriteAction ID="CollectToDB" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" />
+          <WriteAction ID="CollectToDW" TypeID="DW!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" />
+        </WriteActions>
+      </Rule>
+      <Rule ID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemp.Rule" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>PerformanceCollection</Category>
+        <DataSources>
+          <DataSource ID="DS" TypeID="NetworkLibrary!System.NetworkManagement.SnmpPerformanceDataSource">
+            <Interval>300</Interval>
+            <NoOfRetries>3</NoOfRetries>
+            <Timeout>500</Timeout>
+            <Port>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/PortNumber$</Port>
+            <IP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</IP>
+            <Version>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</Version>
+            <SnmpVarBinds>
+              <SnmpVarBind>
+                <OID>1.3.6.1.4.1.24681.1.3.5.0</OID>
+                <Syntax>0</Syntax>
+                <Value VariantType="8" />
+              </SnmpVarBind>
+            </SnmpVarBinds>
+            <ObjectName>Snmp Performance Object</ObjectName>
+            <CounterName>$Data/SnmpVarBinds/SnmpVarBind[1]/OID$</CounterName>
+          </DataSource>
+        </DataSources>
+        <WriteActions>
+          <WriteAction ID="CollectToDB" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" />
+          <WriteAction ID="CollectToDW" TypeID="DW!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" />
+        </WriteActions>
+      </Rule>
+      <Rule ID="InsideTechnologies.NetworkDevice.QNAP.MemoryFree.Rule" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>PerformanceCollection</Category>
+        <DataSources>
+          <DataSource ID="DS" TypeID="NetworkLibrary!System.NetworkManagement.SnmpPerformanceDataSource">
+            <Interval>300</Interval>
+            <NoOfRetries>3</NoOfRetries>
+            <Timeout>500</Timeout>
+            <Port>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/PortNumber$</Port>
+            <IP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</IP>
+            <Version>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</Version>
+            <SnmpVarBinds>
+              <SnmpVarBind>
+                <OID>1.3.6.1.4.1.24681.1.3.3.0</OID>
+                <Syntax>0</Syntax>
+                <Value VariantType="8" />
+              </SnmpVarBind>
+            </SnmpVarBinds>
+            <ObjectName>Snmp Performance Object</ObjectName>
+            <CounterName>$Data/SnmpVarBinds/SnmpVarBind[1]/OID$</CounterName>
+          </DataSource>
+        </DataSources>
+        <WriteActions>
+          <WriteAction ID="CollectToDB" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" />
+          <WriteAction ID="CollectToDW" TypeID="DW!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" />
+        </WriteActions>
+      </Rule>
+      <Rule ID="InsideTechnologies.NetworkDevice.QNAP.NetworkSent.Rule" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>PerformanceCollection</Category>
+        <DataSources>
+          <DataSource ID="DS" TypeID="NetworkLibrary!System.NetworkManagement.SnmpPerformanceDataSource">
+            <Interval>120</Interval>
+            <NoOfRetries>3</NoOfRetries>
+            <Timeout>500</Timeout>
+            <Port>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/PortNumber$</Port>
+            <IP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</IP>
+            <Version>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</Version>
+            <SnmpVarBinds>
+              <SnmpVarBind>
+                <OID>.1.3.6.1.4.1.24681.1.2.9.1.4.1</OID>
+                <Syntax>0</Syntax>
+                <Value VariantType="8" />
+              </SnmpVarBind>
+            </SnmpVarBinds>
+            <ObjectName>Snmp Performance Object</ObjectName>
+            <CounterName>$Data/SnmpVarBinds/SnmpVarBind[1]/OID$</CounterName>
+          </DataSource>
+        </DataSources>
+        <WriteActions>
+          <WriteAction ID="WriteToDB" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" />
+          <WriteAction ID="WriteToDW" TypeID="DW!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" />
+        </WriteActions>
+      </Rule>
+      <Rule ID="InsideTechnologies.NetworkDevice.QNAP.Events.Rule" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>EventCollection</Category>
+        <DataSources>
+          <DataSource ID="DS" TypeID="NetworkLibrary!System.NetworkManagement.SnmpTrapEventProvider">
+            <IP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</IP>
+            <Version>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</Version>
+            <OIDProps>
+              <OIDProp>.1.3.6.1.4.1.24681.1.1.101</OIDProp>
+			  <OIDProp>.1.3.6.1.4.1.24681.1.1.102</OIDProp>
+			  <OIDProp>.1.3.6.1.4.1.24681.1.1.103</OIDProp>
+            </OIDProps>
+            <EventOriginId>$Target/Id$</EventOriginId>
+            <PublisherId>$Target/Id$</PublisherId>
+            <PublisherName>Snmp Event</PublisherName>
+            <Channel>SnmpEvent</Channel>
+            <LoggingComputer />
+            <EventNumber>1501</EventNumber>
+            <EventCategory>5</EventCategory>
+            <EventLevel>10</EventLevel>
+            <UserName />
+            <Params />
+          </DataSource>
+        </DataSources>
+        <WriteActions>
+          <WriteAction ID="WriteToDB" TypeID="SC!Microsoft.SystemCenter.CollectEvent" />
+          <WriteAction ID="WriteToDW" TypeID="DW!Microsoft.SystemCenter.DataWarehouse.PublishEventData" />
+        </WriteActions>
+      </Rule>
+      <Rule ID="InsideTechnologies.NetworkDevice.QNAP.NetworkReceived.Rule" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100">
+        <Category>PerformanceCollection</Category>
+        <DataSources>
+          <DataSource ID="DS" TypeID="NetworkLibrary!System.NetworkManagement.SnmpPerformanceDataSource">
+            <Interval>120</Interval>
+            <NoOfRetries>3</NoOfRetries>
+            <Timeout>500</Timeout>
+            <Port>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/PortNumber$</Port>
+            <IP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</IP>
+            <Version>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</Version>
+            <SnmpVarBinds>
+              <SnmpVarBind>
+                <OID>.1.3.6.1.4.1.24681.1.2.9.1.3.1</OID>
+                <Syntax>0</Syntax>
+                <Value VariantType="8" />
+              </SnmpVarBind>
+            </SnmpVarBinds>
+            <ObjectName>Snmp Performance Object</ObjectName>
+            <CounterName>$Data/SnmpVarBinds/SnmpVarBind[1]/OID$</CounterName>
+          </DataSource>
+        </DataSources>
+        <WriteActions>
+          <WriteAction ID="WriteToDB" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" />
+          <WriteAction ID="WriteToDW" TypeID="DW!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" />
+        </WriteActions>
+      </Rule>
+    </Rules>
+    <Monitors>
+      <UnitMonitor ID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.Monitor" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" ParentMonitorID="Health!System.Health.PerformanceState" Remotable="true" Priority="Normal" TypeID="NetworkLibrary!System.NetworkManagement.SnmpProbe.2SingleEvent2StateMonitorType" ConfirmDelivery="false">
+        <Category>Custom</Category>
+        <AlertSettings AlertMessage="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.AlertMessage">
+          <AlertOnState>Error</AlertOnState>
+          <AutoResolve>true</AutoResolve>
+          <AlertPriority>Normal</AlertPriority>
+          <AlertSeverity>Error</AlertSeverity>
+          <AlertParameters>
+            <AlertParameter1>$Target/Property[Type="System!System.Entity"]/DisplayName$</AlertParameter1>
+            <AlertParameter2>$Data/Context/SnmpVarBinds/SnmpVarBind[.1.3.6.1.4.1.24681.1.3.1.0]/Value$</AlertParameter2>
+          </AlertParameters>
+        </AlertSettings>
+        <OperationalStates>
+          <OperationalState ID="UnderThreshold" MonitorTypeStateID="SecondEventRaised" HealthState="Success" />
+          <OperationalState ID="OverThreshold" MonitorTypeStateID="FirstEventRaised" HealthState="Error" />
+        </OperationalStates>
+        <Configuration>
+          <FirstInterval>120</FirstInterval>
+          <FirstIP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</FirstIP>
+          <FirstVersion>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</FirstVersion>
+          <FirstSnmpVarBinds>
+            <SnmpVarBind>
+              <OID>.1.3.6.1.4.1.24681.1.3.1.0</OID>
+              <Syntax>0</Syntax>
+              <Value VariantType="8" />
+            </SnmpVarBind>
+          </FirstSnmpVarBinds>
+          <FirstExpression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery Type="String">SnmpVarBinds/SnmpVarBind[OID='.1.3.6.1.4.1.24681.1.3.1.0']/Value</XPathQuery>
+              </ValueExpression>
+              <Operator>GreaterEqual</Operator>
+              <ValueExpression>
+                <Value Type="String">80</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </FirstExpression>
+          <SecondInterval>120</SecondInterval>
+          <SecondIP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</SecondIP>
+          <SecondVersion>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</SecondVersion>
+          <SecondSnmpVarBinds>
+            <SnmpVarBind>
+              <OID>.1.3.6.1.4.1.24681.1.3.1.0</OID>
+              <Syntax>0</Syntax>
+              <Value VariantType="8" />
+            </SnmpVarBind>
+          </SecondSnmpVarBinds>
+          <SecondExpression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery Type="String">SnmpVarBinds/SnmpVarBind[OID='.1.3.6.1.4.1.24681.1.3.1.0']/Value</XPathQuery>
+              </ValueExpression>
+              <Operator>Less</Operator>
+              <ValueExpression>
+                <Value Type="String">80</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </SecondExpression>
+          <NoOfRetries>3</NoOfRetries>
+          <Timeout>500</Timeout>
+          <Port>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/PortNumber$</Port>
+        </Configuration>
+      </UnitMonitor>
+      <UnitMonitor ID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.Monitor" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" ParentMonitorID="Health!System.Health.PerformanceState" Remotable="true" Priority="Normal" TypeID="NetworkLibrary!System.NetworkManagement.SnmpProbe.2SingleEvent2StateMonitorType" ConfirmDelivery="false">
+        <Category>Custom</Category>
+        <AlertSettings AlertMessage="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.AlertMessage">
+          <AlertOnState>Error</AlertOnState>
+          <AutoResolve>true</AutoResolve>
+          <AlertPriority>Normal</AlertPriority>
+          <AlertSeverity>Error</AlertSeverity>
+		  <AlertParameters>
+            <AlertParameter1>$Target/Property[Type="System!System.Entity"]/DisplayName$</AlertParameter1>
+            <AlertParameter2>$Data/Context/SnmpVarBinds/SnmpVarBind[.1.3.6.1.4.1.24681.1.3.3.0]/Value$</AlertParameter2>
+          </AlertParameters>
+        </AlertSettings>
+        <OperationalStates>
+          <OperationalState ID="OverThreshold" MonitorTypeStateID="SecondEventRaised" HealthState="Success" />
+          <OperationalState ID="UnderThreshold" MonitorTypeStateID="FirstEventRaised" HealthState="Error" />
+        </OperationalStates>
+        <Configuration>
+          <FirstInterval>120</FirstInterval>
+          <FirstIP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</FirstIP>
+          <FirstVersion>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</FirstVersion>
+          <FirstSnmpVarBinds>
+            <SnmpVarBind>
+              <OID>.1.3.6.1.4.1.24681.1.3.3.0</OID>
+              <Syntax>0</Syntax>
+              <Value VariantType="8" />
+            </SnmpVarBind>
+          </FirstSnmpVarBinds>
+          <FirstExpression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery Type="String">SnmpVarBinds/SnmpVarBind[OID='.1.3.6.1.4.1.24681.1.3.3.0']/Value</XPathQuery>
+              </ValueExpression>
+              <Operator>Less</Operator>
+              <ValueExpression>
+                <Value Type="String">400000</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </FirstExpression>
+          <SecondInterval>120</SecondInterval>
+          <SecondIP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</SecondIP>
+          <SecondVersion>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</SecondVersion>
+          <SecondSnmpVarBinds>
+            <SnmpVarBind>
+              <OID>.1.3.6.1.4.1.24681.1.3.3.0</OID>
+              <Syntax>0</Syntax>
+              <Value VariantType="8" />
+            </SnmpVarBind>
+          </SecondSnmpVarBinds>
+          <SecondExpression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery Type="String">SnmpVarBinds/SnmpVarBind[OID='.1.3.6.1.4.1.24681.1.3.3.0']/Value</XPathQuery>
+              </ValueExpression>
+              <Operator>GreaterEqual</Operator>
+              <ValueExpression>
+                <Value Type="String">400000</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </SecondExpression>
+          <NoOfRetries>3</NoOfRetries>
+          <Timeout>500</Timeout>
+          <Port>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/PortNumber$</Port>
+        </Configuration>
+      </UnitMonitor>
+      <UnitMonitor ID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.Monitor" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" ParentMonitorID="Health!System.Health.PerformanceState" Remotable="true" Priority="Normal" TypeID="NetworkLibrary!System.NetworkManagement.SnmpProbe.2SingleEvent2StateMonitorType" ConfirmDelivery="false">
+        <Category>Custom</Category>
+        <AlertSettings AlertMessage="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.AlertMessage">
+          <AlertOnState>Error</AlertOnState>
+          <AutoResolve>true</AutoResolve>
+          <AlertPriority>Normal</AlertPriority>
+          <AlertSeverity>Error</AlertSeverity>
+          <AlertParameters>
+            <AlertParameter1>$Target/Property[Type="System!System.Entity"]/DisplayName$</AlertParameter1>
+            <AlertParameter2>$Data/Context/SnmpVarBinds/SnmpVarBind[.1.3.6.1.4.1.24681.1.3.5.0]/Value$</AlertParameter2>
+          </AlertParameters>
+        </AlertSettings>
+        <OperationalStates>
+          <OperationalState ID="UnderThreshold" MonitorTypeStateID="SecondEventRaised" HealthState="Success" />
+          <OperationalState ID="OverThreshold" MonitorTypeStateID="FirstEventRaised" HealthState="Error" />
+        </OperationalStates>
+        <Configuration>
+          <FirstInterval>120</FirstInterval>
+          <FirstIP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</FirstIP>
+          <FirstVersion>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</FirstVersion>
+          <FirstSnmpVarBinds>
+            <SnmpVarBind>
+              <OID>.1.3.6.1.4.1.24681.1.3.5.0</OID>
+              <Syntax>0</Syntax>
+              <Value VariantType="8" />
+            </SnmpVarBind>
+          </FirstSnmpVarBinds>
+          <FirstExpression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery Type="String">SnmpVarBinds/SnmpVarBind[OID='.1.3.6.1.4.1.24681.1.3.5.0']/Value</XPathQuery>
+              </ValueExpression>
+              <Operator>GreaterEqual</Operator>
+              <ValueExpression>
+                <Value Type="String">50</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </FirstExpression>
+          <SecondInterval>120</SecondInterval>
+          <SecondIP>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</SecondIP>
+          <SecondVersion>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</SecondVersion>
+          <SecondSnmpVarBinds>
+            <SnmpVarBind>
+              <OID>.1.3.6.1.4.1.24681.1.3.5.0</OID>
+              <Syntax>0</Syntax>
+              <Value VariantType="8" />
+            </SnmpVarBind>
+          </SecondSnmpVarBinds>
+          <SecondExpression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery Type="String">SnmpVarBinds/SnmpVarBind[OID='.1.3.6.1.4.1.24681.1.3.5.0']/Value</XPathQuery>
+              </ValueExpression>
+              <Operator>Less</Operator>
+              <ValueExpression>
+                <Value Type="String">50</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </SecondExpression>
+          <NoOfRetries>3</NoOfRetries>
+          <Timeout>500</Timeout>
+          <Port>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/PortNumber$</Port>
+        </Configuration>
+      </UnitMonitor>
+    </Monitors>
+  </Monitoring>
+  <Presentation>
+    <Views>
+      <View ID="InsideTechnologies.NetworkDevice.QNAP.ActiveAlerts.View" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" TypeID="SC!Microsoft.SystemCenter.AlertViewType" Visible="true">
+        <Category>Operations</Category>
+        <Criteria>
+          <ResolutionState>
+            <StateRange Operator="NotEquals">255</StateRange>
+          </ResolutionState>
+        </Criteria>
+        <Presentation>
+          <ColumnInfo Index="0" SortIndex="0" Width="22" Grouped="true" Sorted="false" IsSortable="true" Visible="true" SortOrder="Descending">
+            <Name>Severity</Name>
+            <Id>Severity</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="1" SortIndex="-1" Width="54" Grouped="false" Sorted="false" IsSortable="false" Visible="true" SortOrder="Ascending">
+            <Name>Icon</Name>
+            <Id>Icon</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="2" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Path</Name>
+            <Id>MonitoringObjectPath</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="3" SortIndex="-1" Width="22" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Maintenance Mode</Name>
+            <Id>MonitoringObjectInMaintenanceMode</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="4" SortIndex="-1" Width="250" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Source</Name>
+            <Id>MonitoringObjectDisplayName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="5" SortIndex="-1" Width="250" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Name</Name>
+            <Id>Name</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="6" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Resolution State</Name>
+            <Id>ResolutionState</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="7" SortIndex="1" Width="150" Grouped="false" Sorted="true" IsSortable="true" Visible="true" SortOrder="Descending">
+            <Name>Created</Name>
+            <Id>TimeRaised</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="8" SortIndex="1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Age</Name>
+            <Id>Age</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="9" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Type</Name>
+            <Id>Category</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="10" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Owner</Name>
+            <Id>Owner</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="11" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Priority</Name>
+            <Id>Priority</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="12" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Latency</Name>
+            <Id>Latency</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="13" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Description</Name>
+            <Id>Description</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="14" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Connector</Name>
+            <Id>ConnectorId</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="15" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Forwarding Status</Name>
+            <Id>ConnectorStatus</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="16" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Class</Name>
+            <Id>Class</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="17" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Time in State</Name>
+            <Id>TimeInState</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="18" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Custom Field 1</Name>
+            <Id>CustomField1</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="19" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Custom Field 2</Name>
+            <Id>CustomField2</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="20" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Custom Field 3</Name>
+            <Id>CustomField3</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="21" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Custom Field 4</Name>
+            <Id>CustomField4</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="22" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Custom Field 5</Name>
+            <Id>CustomField5</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="23" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Custom Field 6</Name>
+            <Id>CustomField6</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="24" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Custom Field 7</Name>
+            <Id>CustomField7</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="25" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Custom Field 8</Name>
+            <Id>CustomField8</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="26" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Custom Field 9</Name>
+            <Id>CustomField9</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="27" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Custom Field 10</Name>
+            <Id>CustomField10</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="28" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Resolved By</Name>
+            <Id>ResolvedBy</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="29" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Time Resolved</Name>
+            <Id>TimeResolved</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="30" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Last State Change</Name>
+            <Id>TimeResolutionStateLastModified</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="31" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Last Modified</Name>
+            <Id>LastModified</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="32" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Last Modified By</Name>
+            <Id>LastModifiedBy</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="33" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Management Group</Name>
+            <Id>ManagementGroup</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="34" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Site</Name>
+            <Id>SiteName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="35" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Repeat Count</Name>
+            <Id>RepeatCount</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="36" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Ticket ID</Name>
+            <Id>TicketId</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="37" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>TFS Work Item ID</Name>
+            <Id>TfsWorkItemId</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="38" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>TFS Work Item Owner</Name>
+            <Id>TfsWorkItemOwner</Id>
+          </ColumnInfo>
+        </Presentation>
+        <Target />
+      </View>
+      <View ID="InsideTechnologies.NetworkDevice.QNAP.StateView" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
+        <Category>Operations</Category>
+        <Criteria>
+          <InMaintenanceMode>false</InMaintenanceMode>
+        </Criteria>
+        <Presentation>
+          <ColumnInfo Index="0" SortIndex="0" Width="50" Grouped="false" Sorted="true" IsSortable="true" Visible="true" SortOrder="Descending">
+            <Name>State</Name>
+            <Id>InsideTechnologies.NetworkDevice.QNAP-*-07c585fc-8b83-4068-c073-bf7084b91d5d-*-Health</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="1" SortIndex="-1" Width="50" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Maintenance Mode</Name>
+            <Id>InMaintenanceMode</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="2" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Name</Name>
+            <Id>Name</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="3" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Path</Name>
+            <Id>Path</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="4" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Display Name</Name>
+            <Id>System.Entity/DisplayName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="5" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Access Mode</Name>
+            <Id>System.NetworkManagement.Node/AccessMode</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="6" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Certification</Name>
+            <Id>System.NetworkManagement.Node/Certification</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="7" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Description</Name>
+            <Id>System.NetworkManagement.Node/Description</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="8" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Device Key</Name>
+            <Id>System.NetworkManagement.Node/DeviceKey</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="9" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Location</Name>
+            <Id>System.NetworkManagement.Node/Location</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="10" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Model</Name>
+            <Id>System.NetworkManagement.Node/Model</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="11" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Port Number</Name>
+            <Id>System.NetworkManagement.Node/PortNumber</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="12" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Primary Owner Contact</Name>
+            <Id>System.NetworkManagement.Node/PrimaryOwnerContact</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="13" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Primary Owner Name</Name>
+            <Id>System.NetworkManagement.Node/PrimaryOwnerName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="14" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Virtual Community Suffix</Name>
+            <Id>System.NetworkManagement.Node/VirtualCommunitySuffix</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="15" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>SNMP Agent Address</Name>
+            <Id>System.NetworkManagement.Node/SNMPAddress</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="16" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>SNMP Version</Name>
+            <Id>System.NetworkManagement.Node/SNMPVersion</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="17" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="false" Visible="false" SortOrder="Ascending">
+            <Name>Supports SNMP</Name>
+            <Id>System.NetworkManagement.Node/SupportsSNMP</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="18" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>MIB2 System Name</Name>
+            <Id>System.NetworkManagement.Node/sysName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="19" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>System Object ID</Name>
+            <Id>System.NetworkManagement.Node/SystemObjectID</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="20" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Vendor</Name>
+            <Id>System.NetworkManagement.Node/Vendor</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="21" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>ObjectID</Name>
+            <Id>InsideTechnologies.NetworkDevice.QNAP/ObjectID</Id>
+          </ColumnInfo>
+        </Presentation>
+        <Target />
+      </View>
+      <View ID="InsideTechnologies.NetworkDevice.QNAP.Processor.PerfView" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" TypeID="SC!Microsoft.SystemCenter.PerformanceViewType" Visible="true">
+        <Category>Operations</Category>
+        <Criteria>
+          <Counter>.1.3.6.1.4.1.24681.1.3.1.0</Counter>
+        </Criteria>
+        <Presentation>
+          <SortedColumnIndex>0</SortedColumnIndex>
+          <SortOrder>0</SortOrder>
+          <StartTime>2014-07-06T14:24:42.1841058+03:00</StartTime>
+          <EndTime>2014-07-07T14:24:42.1841058+03:00</EndTime>
+          <DynamicTimeTicks>2592000000000</DynamicTimeTicks>
+          <IsDynamic>true</IsDynamic>
+          <Is3DMode>false</Is3DMode>
+          <ShowAlerts>false</ShowAlerts>
+          <ShowMaintenanceMode>false</ShowMaintenanceMode>
+          <BaselineMode>false</BaselineMode>
+          <ShowPointLabels>false</ShowPointLabels>
+          <EnableSmartLabels>true</EnableSmartLabels>
+          <RightAngleAxes>false</RightAngleAxes>
+          <ClusterSeries>false</ClusterSeries>
+          <Title />
+          <TitleFont>Microsoft Sans Serif,12,Regular</TitleFont>
+          <ChartFont>Microsoft Sans Serif,8.25,Regular</ChartFont>
+          <ShowBands>false</ShowBands>
+          <BandColor>-1579033</BandColor>
+          <ChartType>Line</ChartType>
+          <Depth>100</Depth>
+          <GapDepth>100</GapDepth>
+          <Perspective>10</Perspective>
+          <GraphXRotation>0</GraphXRotation>
+          <GraphYRotation>0</GraphYRotation>
+          <XLabelAngle>0</XLabelAngle>
+          <LabelColor>-16777216</LabelColor>
+          <LabelFont>Microsoft Sans Serif,8.25,Regular</LabelFont>
+          <XAxisVisible>True</XAxisVisible>
+          <XShowMajorGridlines>false</XShowMajorGridlines>
+          <XShowMinorGridlines>false</XShowMinorGridlines>
+          <ShowInterlaceStrips>false</ShowInterlaceStrips>
+          <XInterlaceColor>16777215</XInterlaceColor>
+          <XShowSideMargin>true</XShowSideMargin>
+          <XAxisFont>Microsoft Sans Serif,8.25,Regular</XAxisFont>
+          <AutoAxis>true</AutoAxis>
+          <AxisMax>100</AxisMax>
+          <AxisMin>0</AxisMin>
+          <YAxisVisible>True</YAxisVisible>
+          <YShowMajorGridlines>true</YShowMajorGridlines>
+          <YShowMinorGridlines>false</YShowMinorGridlines>
+          <YShowInterlaceStrips>false</YShowInterlaceStrips>
+          <YShowSideMargin>true</YShowSideMargin>
+          <YAxisFont>Microsoft Sans Serif,8.25,Regular</YAxisFont>
+          <BackgroundColor1>-1</BackgroundColor1>
+          <BackgroundColor2>-1</BackgroundColor2>
+          <GradientType>None</GradientType>
+          <Series />
+        </Presentation>
+      </View>
+      <View ID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemp.PerfView" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" TypeID="SC!Microsoft.SystemCenter.PerformanceViewType" Visible="true">
+        <Category>Operations</Category>
+        <Criteria>
+          <Counter>.1.3.6.1.4.1.24681.1.3.5.0</Counter>
+        </Criteria>
+        <Presentation>
+          <SortedColumnIndex>0</SortedColumnIndex>
+          <SortOrder>0</SortOrder>
+          <StartTime>2014-07-06T14:24:42.1841058+03:00</StartTime>
+          <EndTime>2014-07-07T14:24:42.1841058+03:00</EndTime>
+          <DynamicTimeTicks>2592000000000</DynamicTimeTicks>
+          <IsDynamic>true</IsDynamic>
+          <Is3DMode>false</Is3DMode>
+          <ShowAlerts>false</ShowAlerts>
+          <ShowMaintenanceMode>false</ShowMaintenanceMode>
+          <BaselineMode>false</BaselineMode>
+          <ShowPointLabels>false</ShowPointLabels>
+          <EnableSmartLabels>true</EnableSmartLabels>
+          <RightAngleAxes>false</RightAngleAxes>
+          <ClusterSeries>false</ClusterSeries>
+          <Title />
+          <TitleFont>Microsoft Sans Serif,12,Regular</TitleFont>
+          <ChartFont>Microsoft Sans Serif,8.25,Regular</ChartFont>
+          <ShowBands>false</ShowBands>
+          <BandColor>-1579033</BandColor>
+          <ChartType>Line</ChartType>
+          <Depth>100</Depth>
+          <GapDepth>100</GapDepth>
+          <Perspective>10</Perspective>
+          <GraphXRotation>0</GraphXRotation>
+          <GraphYRotation>0</GraphYRotation>
+          <XLabelAngle>0</XLabelAngle>
+          <LabelColor>-16777216</LabelColor>
+          <LabelFont>Microsoft Sans Serif,8.25,Regular</LabelFont>
+          <XAxisVisible>True</XAxisVisible>
+          <XShowMajorGridlines>false</XShowMajorGridlines>
+          <XShowMinorGridlines>false</XShowMinorGridlines>
+          <ShowInterlaceStrips>false</ShowInterlaceStrips>
+          <XInterlaceColor>16777215</XInterlaceColor>
+          <XShowSideMargin>true</XShowSideMargin>
+          <XAxisFont>Microsoft Sans Serif,8.25,Regular</XAxisFont>
+          <AutoAxis>true</AutoAxis>
+          <AxisMax>100</AxisMax>
+          <AxisMin>0</AxisMin>
+          <YAxisVisible>True</YAxisVisible>
+          <YShowMajorGridlines>true</YShowMajorGridlines>
+          <YShowMinorGridlines>false</YShowMinorGridlines>
+          <YShowInterlaceStrips>false</YShowInterlaceStrips>
+          <YShowSideMargin>true</YShowSideMargin>
+          <YAxisFont>Microsoft Sans Serif,8.25,Regular</YAxisFont>
+          <BackgroundColor1>-1</BackgroundColor1>
+          <BackgroundColor2>-1</BackgroundColor2>
+          <GradientType>None</GradientType>
+          <Series />
+        </Presentation>
+      </View>
+      <View ID="InsideTechnologies.NetworkDevice.QNAP.MemoryFree.PerfView" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" TypeID="SC!Microsoft.SystemCenter.PerformanceViewType" Visible="true">
+        <Category>Operations</Category>
+        <Criteria>
+          <Counter>.1.3.6.1.4.1.24681.1.3.3.0</Counter>
+        </Criteria>
+        <Presentation>
+          <SortedColumnIndex>0</SortedColumnIndex>
+          <SortOrder>0</SortOrder>
+          <StartTime>2015-03-13T09:13:35.6309487+01:00</StartTime>
+          <EndTime>2015-03-14T09:13:35.6309487+01:00</EndTime>
+          <DynamicTimeTicks>864000000000</DynamicTimeTicks>
+          <IsDynamic>true</IsDynamic>
+          <Is3DMode>false</Is3DMode>
+          <ShowAlerts>false</ShowAlerts>
+          <ShowMaintenanceMode>false</ShowMaintenanceMode>
+          <BaselineMode>false</BaselineMode>
+          <ShowPointLabels>false</ShowPointLabels>
+          <EnableSmartLabels>true</EnableSmartLabels>
+          <RightAngleAxes>false</RightAngleAxes>
+          <ClusterSeries>false</ClusterSeries>
+          <Title />
+          <TitleFont>Microsoft Sans Serif,12,Regular</TitleFont>
+          <ChartFont>Microsoft Sans Serif,8.25,Regular</ChartFont>
+          <ShowBands>false</ShowBands>
+          <BandColor>-1579033</BandColor>
+          <ChartType>Line</ChartType>
+          <Depth>100</Depth>
+          <GapDepth>100</GapDepth>
+          <Perspective>10</Perspective>
+          <GraphXRotation>0</GraphXRotation>
+          <GraphYRotation>0</GraphYRotation>
+          <XLabelAngle>0</XLabelAngle>
+          <LabelColor>-16777216</LabelColor>
+          <LabelFont>Microsoft Sans Serif,8.25,Regular</LabelFont>
+          <XAxisVisible>True</XAxisVisible>
+          <XShowMajorGridlines>false</XShowMajorGridlines>
+          <XShowMinorGridlines>false</XShowMinorGridlines>
+          <ShowInterlaceStrips>false</ShowInterlaceStrips>
+          <XInterlaceColor>16777215</XInterlaceColor>
+          <XShowSideMargin>true</XShowSideMargin>
+          <XAxisFont>Microsoft Sans Serif,8.25,Regular</XAxisFont>
+          <AutoAxis>true</AutoAxis>
+          <AxisMax>100</AxisMax>
+          <AxisMin>0</AxisMin>
+          <YAxisVisible>True</YAxisVisible>
+          <YShowMajorGridlines>true</YShowMajorGridlines>
+          <YShowMinorGridlines>false</YShowMinorGridlines>
+          <YShowInterlaceStrips>false</YShowInterlaceStrips>
+          <YShowSideMargin>true</YShowSideMargin>
+          <YAxisFont>Microsoft Sans Serif,8.25,Regular</YAxisFont>
+          <BackgroundColor1>-1</BackgroundColor1>
+          <BackgroundColor2>-1</BackgroundColor2>
+          <GradientType>None</GradientType>
+          <Series />
+        </Presentation>
+        <Target />
+      </View>
+      <View ID="InsideTechnologies.NetworkDevice.QNAP.Events" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" TypeID="SC!Microsoft.SystemCenter.EventViewType" Visible="true">
+        <Category>Operations</Category>
+        <Criteria />
+        <Presentation>
+          <ColumnInfo Index="0" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Level</Name>
+            <Id>LevelId</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="1" SortIndex="0" Width="100" Grouped="false" Sorted="true" IsSortable="true" Visible="true" SortOrder="Descending">
+            <Name>Date and Time</Name>
+            <Id>TimeGenerated</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="2" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Source</Name>
+            <Id>PublisherName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="3" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Name</Name>
+            <Id>MonitoringObjectDisplayName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="4" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>User</Name>
+            <Id>User</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="5" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Event Number</Name>
+            <Id>Number</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="6" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Log Name</Name>
+            <Id>Channel</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="7" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Logging Computer</Name>
+            <Id>LoggingComputer</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="8" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Rule Name</Name>
+            <Id>RuleDisplayName</Id>
+          </ColumnInfo>
+        </Presentation>
+        <Target />
+      </View>
+      <View ID="InsideTechnologies.NetworkDevice.QNAP.Network.PerfView" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" TypeID="SC!Microsoft.SystemCenter.PerformanceViewType" Visible="true">
+        <Category>Operations</Category>
+        <Criteria>
+          <Counter>.1.3.6.1.4.1.24681.1.2.9.1.</Counter>
+        </Criteria>
+        <Presentation>
+          <SortedColumnIndex>0</SortedColumnIndex>
+          <SortOrder>0</SortOrder>
+          <StartTime>2015-03-14T12:49:10.9431209+01:00</StartTime>
+          <EndTime>2015-03-15T12:49:10.9431209+01:00</EndTime>
+          <DynamicTimeTicks>864000000000</DynamicTimeTicks>
+          <IsDynamic>true</IsDynamic>
+          <Is3DMode>false</Is3DMode>
+          <ShowAlerts>false</ShowAlerts>
+          <ShowMaintenanceMode>false</ShowMaintenanceMode>
+          <BaselineMode>false</BaselineMode>
+          <ShowPointLabels>false</ShowPointLabels>
+          <EnableSmartLabels>true</EnableSmartLabels>
+          <RightAngleAxes>false</RightAngleAxes>
+          <ClusterSeries>false</ClusterSeries>
+          <Title />
+          <TitleFont>Microsoft Sans Serif,12,Regular</TitleFont>
+          <ChartFont>Microsoft Sans Serif,8.25,Regular</ChartFont>
+          <ShowBands>false</ShowBands>
+          <BandColor>-1579033</BandColor>
+          <ChartType>Line</ChartType>
+          <Depth>100</Depth>
+          <GapDepth>100</GapDepth>
+          <Perspective>10</Perspective>
+          <GraphXRotation>0</GraphXRotation>
+          <GraphYRotation>0</GraphYRotation>
+          <XLabelAngle>0</XLabelAngle>
+          <LabelColor>-16777216</LabelColor>
+          <LabelFont>Microsoft Sans Serif,8.25,Regular</LabelFont>
+          <XAxisVisible>True</XAxisVisible>
+          <XShowMajorGridlines>false</XShowMajorGridlines>
+          <XShowMinorGridlines>false</XShowMinorGridlines>
+          <ShowInterlaceStrips>false</ShowInterlaceStrips>
+          <XInterlaceColor>16777215</XInterlaceColor>
+          <XShowSideMargin>true</XShowSideMargin>
+          <XAxisFont>Microsoft Sans Serif,8.25,Regular</XAxisFont>
+          <AutoAxis>true</AutoAxis>
+          <AxisMax>100</AxisMax>
+          <AxisMin>0</AxisMin>
+          <YAxisVisible>True</YAxisVisible>
+          <YShowMajorGridlines>true</YShowMajorGridlines>
+          <YShowMinorGridlines>false</YShowMinorGridlines>
+          <YShowInterlaceStrips>false</YShowInterlaceStrips>
+          <YShowSideMargin>true</YShowSideMargin>
+          <YAxisFont>Microsoft Sans Serif,8.25,Regular</YAxisFont>
+          <BackgroundColor1>-1</BackgroundColor1>
+          <BackgroundColor2>-1</BackgroundColor2>
+          <GradientType>None</GradientType>
+          <Series />
+        </Presentation>
+        <Target />
+      </View>
+    </Views>
+    <Folders>
+      <Folder ID="InsideTechnologies.NetworkDevice.QNAP.Folder" Accessibility="Public" ParentFolder="SC!Microsoft.SystemCenter.Monitoring.ViewFolder.Root" />
+    </Folders>
+    <FolderItems>
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.StateView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.ActiveAlerts.View" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.Processor.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemp.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryFree.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.Events" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.Network.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+    </FolderItems>
+    <StringResources>
+      <StringResource ID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.AlertMessage" />
+      <StringResource ID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.AlertMessage" />
+      <StringResource ID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.AlertMessage" />
+    </StringResources>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="InsideTechnologies.QNAP">
+          <Name>Inside Technologies - QNAP Storage</Name>
+          <Description>Custom Management Pack for QNAP Storage Devices created by Silvio Di Benedetto. For feedback and support visit Inside Technologies web site.</Description>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP">
+          <Name>QNAP Devices</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Processor">
+          <Name>QNAP Processor</Name>
+        </DisplayString>
+		<DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Memory">
+          <Name>QNAP Memory</Name>
+        </DisplayString>
+		<DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Interface">
+          <Name>QNAP Network Interface</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Folder">
+          <Name>Inside Technologies - QNAP Devices</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.StateView">
+          <Name>Storage Devices State</Name>
+          <Description>QNAP Device State View</Description>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ActiveAlerts.View">
+          <Name>Active Alerts</Name>
+          <Description>QNAP Devices Active Alerts View</Description>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Processor.PerfView">
+          <Name>CPU Usage</Name>
+          <Description>QNAP Devices Processor Usage Performance View</Description>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemp.PerfView">
+          <Name>CPU Temperature</Name>
+          <Description>QNAP Devices Processor Temperature Performance View</Description>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryFree.PerfView">
+          <Name>Memory Free</Name>
+          <Description>QNAP Devices Free Memory Performance View</Description>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Discovery">
+          <Name>QNAP Storage Discovery</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Discovery.DS">
+          <Name>QNAP Storage Discovery Data Source Module</Name>
+          <Description>Discovers a particular model of network device by retrieving its Object Id.</Description>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.Monitor">
+          <Name>QNAP CPU Usage</Name>
+        </DisplayString>
+		<DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.Monitor">
+          <Name>QNAP CPU Temperature</Name>
+        </DisplayString>
+		<DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.Monitor">
+          <Name>QNAP Memory Usage</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorLoad.Rule">
+          <Name>QNAP CPU Usage Counter</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemp.Rule">
+          <Name>QNAP CPU Temperature Counter</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryFree.Rule">
+          <Name>QNAP Memory Usage Counter</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.AlertMessage">
+          <Name>QNAP Memory Usage</Name>
+          <Description>Memory utilization for device {0} is under the threshold. Memory available is {1} MB</Description>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.Monitor" SubElementID="OverThreshold">
+          <Name>Second Probe Raised</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.Monitor" SubElementID="UnderThreshold">
+          <Name>First Probe Raised</Name>
+        </DisplayString>
+		<DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.AlertMessage">
+          <Name>QNAP Processor Utilization</Name>
+          <Description>Processor utilization for device {0} is over the threshold. Processor utilization is {1} %</Description>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.Monitor" SubElementID="OverThreshold">
+          <Name>First Probe Raised</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.Monitor" SubElementID="UnderThreshold">
+          <Name>Second Probe Raised</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.AlertMessage">
+          <Name>QNAP CPU Temperature</Name>
+          <Description>Processor temperature for device {0} is over the threshold. Temperature is {1} degrees</Description>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.Monitor" SubElementID="OverThreshold">
+          <Name>Second Probe Raised</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.Monitor" SubElementID="UnderThreshold">
+          <Name>First Probe Raised</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Events">
+          <Name>Events</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.NetworkSent.Rule">
+          <Name>QNAP Network Sent Usage</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.NetworkSent.Rule" SubElementID="DS">
+          <Name>SNMP Performance Data Source</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.NetworkSent.Rule" SubElementID="WriteToDW">
+          <Name>Performance data publisher</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.NetworkSent.Rule" SubElementID="WriteToDB">
+          <Name>Performance Data Collection Write Action</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Network.PerfView">
+          <Name>Network Usage</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Events.Rule">
+          <Name>QNAP Events</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.NetworkReceived.Rule">
+          <Name>QNAP Network Received Usage</Name>
+        </DisplayString>
+      </DisplayStrings>
+	  <KnowledgeArticles>
+	   <KnowledgeArticle ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.Monitor" Visible="true">
+          <MamlContent>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Summary</maml:title>
+              <maml:para>This Management Pack monitors QNAP Storage.</maml:para>
+              <maml:para>Devices have to be discovered first through the built-in SCOM 2012 R2 Network Monitoring.</maml:para>
+			  <maml:para>To enable the QNAP device monitoring the device must be discovered using the standard Operations Manager SNMP Discovery process.</maml:para>
+              <maml:para>Performance data (CPU, Memory and Network) is collected for QNAP Devices.</maml:para>
+              <maml:para>The Management Pack discovers QNAP and monitors their state.</maml:para>
+              <maml:para>
+                <maml:navigationLink>
+                  <maml:linkText>QNAP MP Project</maml:linkText>
+                  <maml:uri href="http://www.insidetechnologies.eu/en/community-project/" />
+                </maml:navigationLink>
+              </maml:para>
+            </maml:section>
+			<maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Causes</maml:title>
+              <maml:para>If the alert is in Health state means that the CPU Usage of QNAP is under 80%.</maml:para>
+              <maml:para>If the alert is in Critical state means that the CPU Usage of QNAP is over 80%. Maybe there are some process that using the CPU.</maml:para>
+              <maml:para></maml:para>
+            </maml:section>
+          </MamlContent>
+        </KnowledgeArticle>
+		<KnowledgeArticle ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.Monitor" Visible="true">
+          <MamlContent>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Summary</maml:title>
+              <maml:para>This Management Pack monitors QNAP Storage.</maml:para>
+              <maml:para>Devices have to be discovered first through the built-in SCOM 2012 R2 Network Monitoring.</maml:para>
+			  <maml:para>To enable the QNAP device monitoring the device must be discovered using the standard Operations Manager SNMP Discovery process.</maml:para>
+              <maml:para>Performance data (CPU, Memory and Network) is collected for QNAP Devices.</maml:para>
+              <maml:para>The Management Pack discovers QNAP and monitors their state.</maml:para>
+              <maml:para>
+                <maml:navigationLink>
+                  <maml:linkText>QNAP MP Project</maml:linkText>
+                  <maml:uri href="http://www.insidetechnologies.eu/en/community-project/" />
+                </maml:navigationLink>
+              </maml:para>
+            </maml:section>
+			<maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Causes</maml:title>
+              <maml:para>If the alert is in Health state means that the CPU Temperature of QNAP is under 50 degrees.</maml:para>
+              <maml:para>If the alert is in Critical state means that the CPU Temperature of QNAP is equal or over 50 degrees. Check the room temperature and if the fun works.</maml:para>
+              <maml:para></maml:para>
+            </maml:section>
+          </MamlContent>
+        </KnowledgeArticle>
+		<KnowledgeArticle ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.Monitor" Visible="true">
+          <MamlContent>
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Summary</maml:title>
+              <maml:para>This Management Pack monitors QNAP Storage.</maml:para>
+              <maml:para>Devices have to be discovered first through the built-in SCOM 2012 R2 Network Monitoring.</maml:para>
+			  <maml:para>To enable the QNAP device monitoring the device must be discovered using the standard Operations Manager SNMP Discovery process.</maml:para>
+              <maml:para>Performance data (CPU, Memory and Network) is collected for QNAP Devices.</maml:para>
+              <maml:para>The Management Pack discovers QNAP and monitors their state.</maml:para>
+              <maml:para>
+                <maml:navigationLink>
+                  <maml:linkText>QNAP MP Project</maml:linkText>
+                  <maml:uri href="http://www.insidetechnologies.eu/en/community-project/" />
+                </maml:navigationLink>
+              </maml:para>
+            </maml:section>
+			<maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+              <maml:title>Causes</maml:title>
+              <maml:para>If the alert is in Health state means that the Memory Usage of QNAP is equal or over 400MB.</maml:para>
+              <maml:para>If the alert is in Critical state means that the Memory Usage of QNAP is less 400MB.</maml:para>
+              <maml:para></maml:para>
+            </maml:section>
+          </MamlContent>
+        </KnowledgeArticle>
+      </KnowledgeArticles>
+	</LanguagePack>
+  </LanguagePacks>
+</ManagementPack>
