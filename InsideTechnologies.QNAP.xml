@@ -1,29 +1,29 @@
-﻿<ManagementPack ContentReadable="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema" >
+﻿<?xml version="1.0" encoding="utf-8"?><ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <Manifest>
     <Identity>
       <ID>InsideTechnologies.QNAP</ID>
-      <Version>1.0.0.1</Version>
+      <Version>1.0.1.2017</Version>
     </Identity>
     <Name>InsideTechnologies.QNAP</Name>
     <References>
       <Reference Alias="MicrosoftSystemCenterNetworkDeviceLibrary71102260">
         <ID>Microsoft.SystemCenter.NetworkDevice.Library</ID>
-        <Version>7.0.8560.0</Version>
+        <Version>7.2.11719.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
       <Reference Alias="DW">
         <ID>Microsoft.SystemCenter.DataWarehouse.Library</ID>
-        <Version>7.1.10226.0</Version>
+        <Version>7.2.11719.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
       <Reference Alias="SNMP">
         <ID>System.Snmp.Library</ID>
-        <Version>7.0.8433.0</Version>
+        <Version>7.0.8437.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
       <Reference Alias="NetworkLibrary">
         <ID>System.NetworkManagement.Library</ID>
-        <Version>7.1.10226.0</Version>
+        <Version>7.2.11719.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
       <Reference Alias="Windows">
@@ -33,17 +33,22 @@
       </Reference>
       <Reference Alias="Perf">
         <ID>System.Performance.Library</ID>
-        <Version>7.0.8433.0</Version>
+        <Version>7.0.8437.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
       <Reference Alias="NetworkMonitoring">
         <ID>System.NetworkManagement.Monitoring</ID>
-        <Version>7.1.10226.0</Version>
+        <Version>7.2.11719.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
       <Reference Alias="Visualization">
         <ID>Microsoft.SystemCenter.Visualization.Library</ID>
-        <Version>7.1.10226.0</Version>
+        <Version>7.2.11759.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="MicrosoftSystemCenterInstanceGroupLibrary7585010">
+        <ID>Microsoft.SystemCenter.InstanceGroup.Library</ID>
+        <Version>7.5.8501.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
       <Reference Alias="System">
@@ -51,14 +56,19 @@
         <Version>7.5.8501.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
+      <Reference Alias="ComponentRequiredReference1">
+        <ID>Microsoft.SystemCenter.Image.Library</ID>
+        <Version>7.2.11759.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
       <Reference Alias="SC">
         <ID>Microsoft.SystemCenter.Library</ID>
-        <Version>7.0.8433.0</Version>
+        <Version>7.0.8437.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
       <Reference Alias="Health">
         <ID>System.Health.Library</ID>
-        <Version>7.0.8433.0</Version>
+        <Version>7.0.8437.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
     </References>
@@ -66,11 +76,17 @@
   <TypeDefinitions>
     <EntityTypes>
       <ClassTypes>
-        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Node" Hosted="false" Singleton="false" >
+        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Node" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="Disks" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
         </ClassType>
-        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Processor" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Processor" Hosted="true" Singleton="false" />
-        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Interface" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Interface" Hosted="true" Singleton="false" />
-        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Memory" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Memory" Hosted="true" Singleton="false" />
+        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Processor" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Processor" Hosted="true" Singleton="false" Extension="false" />
+        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Interface" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Interface" Hosted="true" Singleton="false" Extension="false" />
+        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Memory" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.Memory" Hosted="true" Singleton="false" Extension="false" />
+        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Disk" Accessibility="Public" Abstract="false" Base="NetworkLibrary!System.NetworkManagement.LogicalDevice" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="DisksModel" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="DisksCapacity" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+        </ClassType>
+        <ClassType ID="InsideTechnologies.NetworkDevice.QNAP.Group" Accessibility="Public" Abstract="false" Base="MicrosoftSystemCenterInstanceGroupLibrary7585010!Microsoft.SystemCenter.InstanceGroup" Hosted="false" Singleton="true" Extension="false" />
       </ClassTypes>
     </EntityTypes>
     <ModuleTypes>
@@ -82,7 +98,7 @@
           <xsd:element minOccurs="1" name="IPAddress" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element minOccurs="1" name="Community" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element minOccurs="1" name="Version" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-		  <xsd:element minOccurs="1" name="DisplayName" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="DisplayName" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
         </Configuration>
         <ModuleImplementation Isolation="Any">
           <Composite>
@@ -109,7 +125,7 @@
                 </SnmpVarBinds>
               </ProbeAction>
               <ConditionDetection ID="MapToDiscovery" TypeID="System!System.Discovery.FilteredClassSnapshotDataMapper">
-			  <Expression>
+                <Expression>
                   <SimpleExpression>
                     <ValueExpression>
                       <Value>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SystemObjectID$</Value>
@@ -127,11 +143,15 @@
                       <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.Node']/DeviceKey$</Name>
                       <Value>$Config/DeviceKey$</Value>
                     </Setting>
-					<Setting>
+                    <Setting>
                       <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.Node']/sysName$</Name>
                       <Value>$Config/DisplayName$</Value>
                     </Setting>
-					<Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='InsideTechnologies.NetworkDevice.QNAP']/Disks$</Name>
+                      <Value>$Data/SnmpVarBinds/SnmpVarBind[OID=".1.3.6.1.4.1.24681.1.2.10.0"]/Value$</Value>
+                    </Setting>
+                    <Setting>
                       <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.Node']/Vendor$</Name>
                       <Value>QNAP System</Value>
                     </Setting>
@@ -141,10 +161,10 @@
             </MemberModules>
             <Composition>
               <Node ID="MapToDiscovery">
-                  <Node ID="Probe">
-                    <Node ID="Scheduler" />
-                  </Node>
+                <Node ID="Probe">
+                  <Node ID="Scheduler" />
                 </Node>
+              </Node>
             </Composition>
           </Composite>
         </ModuleImplementation>
@@ -310,6 +330,86 @@
         </ModuleImplementation>
         <OutputType>System!System.Discovery.Data</OutputType>
       </DataSourceModuleType>
+      <DataSourceModuleType ID="InsideTechnologies.NetworkDevice.QNAP.Disk.Discovery.DS" Accessibility="Public" Batching="false">
+        <Configuration>
+          <xsd:element minOccurs="1" name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="Port" type="xsd:unsignedInt" default="161" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="IP" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="CommunityString" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="Version" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element minOccurs="1" name="DeviceKey" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="Scheduler" TypeID="System!System.Discovery.Scheduler">
+                <Scheduler>
+                  <SimpleReccuringSchedule>
+                    <Interval>$Config/IntervalSeconds$</Interval>
+                    <SyncTime>$Config/SyncTime$</SyncTime>
+                  </SimpleReccuringSchedule>
+                  <ExcludeDates />
+                </Scheduler>
+              </DataSource>
+              <ProbeAction ID="Probe" TypeID="NetworkLibrary!System.NetworkManagement.SnmpProbe">
+                <Walk>false</Walk>
+                <WalkReturnMultipleItems>false</WalkReturnMultipleItems>
+                <NoOfRetries>3</NoOfRetries>
+                <Timeout>500</Timeout>
+                <Port>$Config/Port$</Port>
+                <IsWriteAction>false</IsWriteAction>
+                <IP>$Config/IP$</IP>
+                <CommunityString>$Config/CommunityString$</CommunityString>
+                <Version>$Config/Version$</Version>
+                <SnmpVarBinds>
+                  <SnmpVarBind>
+                    <OID>.1.3.6.1.4.1.24681.1.3.10.0</OID>
+                    <Syntax>0</Syntax>
+                    <Value VariantType="8" />
+                  </SnmpVarBind>
+                </SnmpVarBinds>
+                <OutputOnError>false</OutputOnError>
+              </ProbeAction>
+              <ConditionDetection ID="MapToDiscovery" TypeID="System!System.Discovery.ClassSnapshotDataMapper">
+                <ClassId>$MPElement[Name='InsideTechnologies.NetworkDevice.QNAP.Disk']$</ClassId>
+                <InstanceSettings>
+                  <Settings>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.Node']/DeviceKey$</Name>
+                      <Value>$Config/DeviceKey$</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='NetworkLibrary!System.NetworkManagement.LogicalDevice']/Key$</Name>
+                      <Value>.1.3.6.1.4.1.24681.1.3.10.0</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='InsideTechnologies.NetworkDevice.QNAP.Disk']/DisksModel$</Name>
+                      <Value>$Data/SnmpVarBinds/SnmpVarBind[OID=".1.3.6.1.4.1.24681.1.2.11.1.5"]/Value$</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='InsideTechnologies.NetworkDevice.QNAP.Disk']/DisksCapacity$</Name>
+                      <Value>$Data/SnmpVarBinds/SnmpVarBind[OID=".1.3.6.1.4.1.24681.1.2.11.1.6"]/Value$</Value>
+                    </Setting>
+                    <Setting>
+                      <Name>$MPElement[Name='System!System.Entity']/DisplayName$</Name>
+                      <Value>QNAP Disk</Value>
+                    </Setting>
+                  </Settings>
+                </InstanceSettings>
+              </ConditionDetection>
+            </MemberModules>
+            <Composition>
+              <Node ID="MapToDiscovery">
+                <Node ID="Probe">
+                  <Node ID="Scheduler" />
+                </Node>
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.Discovery.Data</OutputType>
+      </DataSourceModuleType>
     </ModuleTypes>
   </TypeDefinitions>
   <Monitoring>
@@ -325,7 +425,34 @@
           <IPAddress>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPAddress$</IPAddress>
           <Community>$RunAs[Name="NetworkLibrary!System.NetworkManagement.Snmp.MonitoringAccount"]/CommunityString$</Community>
           <Version>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</Version>
-		  <DisplayName>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/sysName$</DisplayName>
+          <DisplayName>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/sysName$</DisplayName>
+        </DataSource>
+      </Discovery>
+      <Discovery ID="InsideTechnologies.NetworkDevice.QNAP.Group.DiscoveryRule" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP.Group" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryRelationship TypeID="MicrosoftSystemCenterInstanceGroupLibrary7585010!Microsoft.SystemCenter.InstanceGroupContainsEntities" />
+        </DiscoveryTypes>
+        <DataSource ID="GroupPopulationDataSource" TypeID="SC!Microsoft.SystemCenter.GroupPopulator">
+          <RuleId>$MPElement$</RuleId>
+          <GroupInstanceId>$MPElement[Name="InsideTechnologies.NetworkDevice.QNAP.Group"]$</GroupInstanceId>
+          <MembershipRules>
+            <MembershipRule>
+              <MonitoringClass>$MPElement[Name="InsideTechnologies.NetworkDevice.QNAP"]$</MonitoringClass>
+              <RelationshipClass>$MPElement[Name="MicrosoftSystemCenterInstanceGroupLibrary7585010!Microsoft.SystemCenter.InstanceGroupContainsEntities"]$</RelationshipClass>
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <Property>$MPElement[Name="NetworkLibrary!System.NetworkManagement.Node"]/Vendor$</Property>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value>QNAP System</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </MembershipRule>
+          </MembershipRules>
         </DataSource>
       </Discovery>
     </Discoveries>
@@ -442,8 +569,8 @@
             <Version>$Target/Property[Type="NetworkLibrary!System.NetworkManagement.Node"]/SNMPVersion$</Version>
             <OIDProps>
               <OIDProp>.1.3.6.1.4.1.24681.1.1.101</OIDProp>
-			  <OIDProp>.1.3.6.1.4.1.24681.1.1.102</OIDProp>
-			  <OIDProp>.1.3.6.1.4.1.24681.1.1.103</OIDProp>
+              <OIDProp>.1.3.6.1.4.1.24681.1.1.102</OIDProp>
+              <OIDProp>.1.3.6.1.4.1.24681.1.1.103</OIDProp>
             </OIDProps>
             <EventOriginId>$Target/Id$</EventOriginId>
             <PublisherId>$Target/Id$</PublisherId>
@@ -561,7 +688,7 @@
           <AutoResolve>true</AutoResolve>
           <AlertPriority>Normal</AlertPriority>
           <AlertSeverity>Error</AlertSeverity>
-		  <AlertParameters>
+          <AlertParameters>
             <AlertParameter1>$Target/Property[Type="System!System.Entity"]/DisplayName$</AlertParameter1>
             <AlertParameter2>$Data/Context/SnmpVarBinds/SnmpVarBind[.1.3.6.1.4.1.24681.1.3.3.0]/Value$</AlertParameter2>
           </AlertParameters>
@@ -853,7 +980,7 @@
         </Presentation>
         <Target />
       </View>
-      <View ID="InsideTechnologies.NetworkDevice.QNAP.StateView" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
+      <View ID="InsideTechnologies.NetworkDevice.QNAP.State.View" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
         <Category>Operations</Category>
         <Criteria>
           <InMaintenanceMode>false</InMaintenanceMode>
@@ -946,6 +1073,10 @@
           <ColumnInfo Index="21" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
             <Name>ObjectID</Name>
             <Id>InsideTechnologies.NetworkDevice.QNAP/ObjectID</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="8" SortIndex="-1" Width="80" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Disk Number</Name>
+            <Id>InsideTechnologies.NetworkDevice.QNAP/Disks</Id>
           </ColumnInfo>
         </Presentation>
         <Target />
@@ -1219,49 +1350,594 @@
         </Presentation>
         <Target />
       </View>
+      <View ID="InsideTechnologies.NetworkDevice.QNAP.Disk.State.View" Accessibility="Public" Enabled="true" Target="InsideTechnologies.NetworkDevice.QNAP.Disk" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
+        <Category>Operations</Category>
+        <Criteria>
+          <InMaintenanceMode>false</InMaintenanceMode>
+        </Criteria>
+        <Presentation>
+          <ColumnInfo Index="0" SortIndex="0" Width="100" Grouped="false" Sorted="true" IsSortable="true" Visible="true" SortOrder="Descending">
+            <Name>State</Name>
+            <Id>InsideTechnologies.NetworkDevice.QNAP.Disk-*-dce83e27-26ee-f14b-59d4-6a5ab3c012c6-*-Health</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="1" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Maintenance Mode</Name>
+            <Id>InMaintenanceMode</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="2" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Name</Name>
+            <Id>Name</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="3" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="true" SortOrder="Ascending">
+            <Name>Path</Name>
+            <Id>Path</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="4" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Display Name</Name>
+            <Id>System.Entity/DisplayName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="5" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Description</Name>
+            <Id>System.NetworkManagement.LogicalDevice/Description</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="6" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Index</Name>
+            <Id>System.NetworkManagement.LogicalDevice/Index</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="7" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Logical Device Key</Name>
+            <Id>System.NetworkManagement.LogicalDevice/Key</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="8" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Disk Model</Name>
+            <Id>InsideTechnologies.NetworkDevice.QNAP.Disk/DisksModel</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="9" SortIndex="-1" Width="100" Grouped="false" Sorted="false" IsSortable="true" Visible="false" SortOrder="Ascending">
+            <Name>Disk Capacity</Name>
+            <Id>InsideTechnologies.NetworkDevice.QNAP.Disk/DisksCapacity</Id>
+          </ColumnInfo>
+        </Presentation>
+        <Target />
+      </View>
     </Views>
     <Folders>
       <Folder ID="InsideTechnologies.NetworkDevice.QNAP.Folder" Accessibility="Public" ParentFolder="SC!Microsoft.SystemCenter.Monitoring.ViewFolder.Root" />
     </Folders>
     <FolderItems>
-      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.StateView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
-      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.ActiveAlerts.View" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
-      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.Processor.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
-      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemp.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
-      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryFree.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
-      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.Events" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
-      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.Network.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.State.View" ID="InsideTechnologies.NetworkDevice.QNAP.State.View" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.ActiveAlerts.View" ID="InsideTechnologies.NetworkDevice.QNAP.ActiveAlerts.View" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.Processor.PerfView" ID="InsideTechnologies.NetworkDevice.QNAP.Processor.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemp.PerfView" ID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemp.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryFree.PerfView" ID="InsideTechnologies.NetworkDevice.QNAP.MemoryFree.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.Events" ID="InsideTechnologies.NetworkDevice.QNAP.Events" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.Network.PerfView" ID="InsideTechnologies.NetworkDevice.QNAP.Network.PerfView" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <FolderItem ElementID="InsideTechnologies.NetworkDevice.QNAP.Disk.State.View" ID="i37f82b679bdc4480a1fc3bfe648a27a2" Folder="InsideTechnologies.NetworkDevice.QNAP.Folder" />
     </FolderItems>
     <StringResources>
       <StringResource ID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.AlertMessage" />
       <StringResource ID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.AlertMessage" />
       <StringResource ID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.AlertMessage" />
     </StringResources>
+    <ComponentTypes>
+      <ComponentType ID="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard" Accessibility="Public" Base="Visualization!Microsoft.SystemCenter.Visualization.GridLayout" Lifetime="ReferenceCount" />
+      <ComponentType ID="UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceState" Accessibility="Public" Base="Visualization!Microsoft.SystemCenter.Visualization.StateWidget" Lifetime="ReferenceCount" />
+      <ComponentType ID="UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformance" Accessibility="Public" Base="Visualization!Microsoft.SystemCenter.Visualization.PerformanceWidget" Lifetime="ReferenceCount" />
+      <ComponentType ID="UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformance" Accessibility="Public" Base="Visualization!Microsoft.SystemCenter.Visualization.PerformanceWidget" Lifetime="ReferenceCount" />
+    </ComponentTypes>
+    <ComponentReferences>
+      <ComponentReference ID="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboardReference_da6105d6390f480a804608778cb3aa03" Accessibility="Public" TypeID="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard" Parent="InsideTechnologies.NetworkDevice.QNAP.Folder" />
+      <ComponentReference ID="UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceStateReference_22acccb9d025415e98c5f2113a874d60" Accessibility="Public" TypeID="UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceState" Parent="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard" />
+      <ComponentReference ID="UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformanceReference_5820671f455c4a13884d5b10330e8500" Accessibility="Public" TypeID="UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformance" Parent="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard" />
+      <ComponentReference ID="UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformanceReference_eba964641f664f568c2b304002c043a8" Accessibility="Public" TypeID="UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformance" Parent="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard" />
+    </ComponentReferences>
+    <ComponentOverrides>
+      <ComponentOverride ID="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboardOverride" TypeID="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard">
+        <Bindings>
+          <Binding PropertyId="ConfigType">
+            <SimpleValue Type="xsd://string" Value="Microsoft.SystemCenter.Visualization.Library!GridLayout03CellBigTopConfig" />
+          </Binding>
+          <Binding PropertyId="CellRegionMappings">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.LayoutConfig/CellRegionMapping[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.LayoutConfig/CellRegionMapping">
+                <Binding PropertyId="RegionContent">
+                  <SimpleValue Type="xsd://string" Value="InsideTechnologies.QNAP!UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceStateReference_22acccb9d025415e98c5f2113a874d60" />
+                </Binding>
+                <Binding PropertyId="RegionId">
+                  <SimpleValue Type="xsd://string" Value="UIGeneratedRegion_4b60da041005490f83a0c1f1f118bee8" />
+                </Binding>
+                <Binding PropertyId="RegionParameters" />
+                <Binding PropertyId="CellIndex">
+                  <SimpleValue Type="xsd://int" Value="0" />
+                </Binding>
+              </ComplexValue>
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.LayoutConfig/CellRegionMapping">
+                <Binding PropertyId="RegionContent">
+                  <SimpleValue Type="xsd://string" Value="InsideTechnologies.QNAP!UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformanceReference_eba964641f664f568c2b304002c043a8" />
+                </Binding>
+                <Binding PropertyId="RegionId">
+                  <SimpleValue Type="xsd://string" Value="UIGeneratedRegion_5436c03b0afd495c86ee0261b9e020c5" />
+                </Binding>
+                <Binding PropertyId="RegionParameters" />
+                <Binding PropertyId="CellIndex">
+                  <SimpleValue Type="xsd://int" Value="2" />
+                </Binding>
+              </ComplexValue>
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.LayoutConfig/CellRegionMapping">
+                <Binding PropertyId="RegionContent">
+                  <SimpleValue Type="xsd://string" Value="InsideTechnologies.QNAP!UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformanceReference_5820671f455c4a13884d5b10330e8500" />
+                </Binding>
+                <Binding PropertyId="RegionId">
+                  <SimpleValue Type="xsd://string" Value="UIGeneratedRegion_084c265a6c3245fe8cd434ea3a94d5ec" />
+                </Binding>
+                <Binding PropertyId="RegionParameters" />
+                <Binding PropertyId="CellIndex">
+                  <SimpleValue Type="xsd://int" Value="1" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+        </Bindings>
+      </ComponentOverride>
+      <ComponentOverride ID="UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceStateOverride" TypeID="UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceState" Context="/InsideTechnologies.QNAP!UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.GridLayout/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.GridLayout/UIGeneratedRegion_4b60da041005490f83a0c1f1f118bee8/Microsoft.SystemCenter.Visualization.Library!ComposedRegion/InsideTechnologies.QNAP!UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceState/">
+        <Bindings>
+          <Binding PropertyId="TargetIds">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.DataProvider/MPInstanceWithRecursionLevel[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.DataProvider/MPInstanceWithRecursionLevel">
+                <Binding PropertyId="MPInstance">
+                  <ComplexValue Type="mpinstance://System.Library!System.Entity">
+                    <Binding PropertyId="Id">
+                      <SimpleValue Type="xsd://string" Value="d1c2d30f-9228-3191-864e-e91d29013ed1" />
+                    </Binding>
+                  </ComplexValue>
+                </Binding>
+                <Binding PropertyId="RecursionLevel">
+                  <SimpleValue Type="xsd://int" Value="-1" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+          <Binding PropertyId="BaseManagementPackTypes">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.OperationalDataTypes/BaseManagementPackType[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.OperationalDataTypes/BaseManagementPackType">
+                <Binding PropertyId="FullyQualifiedName">
+                  <SimpleValue Type="xsd://string" Value="System.Library!System.Entity" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+          <Binding PropertyId="ShowSearchBar">
+            <SimpleValue Type="xsd://boolean" Value="True" />
+          </Binding>
+          <Binding PropertyId="Columns">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn">
+                <Binding PropertyId="HeaderDisplayObject">
+                  <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.Library.Entity.HealthState/DisplayName$" />
+                </Binding>
+                <Binding PropertyId="SortableGroupable">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="CanResize">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Width">
+                  <SimpleValue Type="xsd://string" Value="Auto" />
+                </Binding>
+                <Binding PropertyId="PropertyName">
+                  <SimpleValue Type="xsd://string" Value="HealthState" />
+                </Binding>
+                <Binding PropertyId="XPath">
+                  <SimpleValue Type="xsd://string" Value="$Object/Property[Name='HealthState']$" />
+                </Binding>
+                <Binding PropertyId="SourceType">
+                  <SimpleValue Type="xsd://string" Value="ManagedEntity" />
+                </Binding>
+              </ComplexValue>
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn">
+                <Binding PropertyId="HeaderDisplayObject">
+                  <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.Library.Entity.InMaintenanceMode/DisplayName$" />
+                </Binding>
+                <Binding PropertyId="SortableGroupable">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="CanResize">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Width">
+                  <SimpleValue Type="xsd://string" Value="Auto" />
+                </Binding>
+                <Binding PropertyId="PropertyName">
+                  <SimpleValue Type="xsd://string" Value="InMaintenanceMode" />
+                </Binding>
+                <Binding PropertyId="XPath">
+                  <SimpleValue Type="xsd://string" Value="$Object/Property[Name='InMaintenanceMode']$" />
+                </Binding>
+                <Binding PropertyId="SourceType">
+                  <SimpleValue Type="xsd://string" Value="ManagedEntity" />
+                </Binding>
+              </ComplexValue>
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn">
+                <Binding PropertyId="HeaderDisplayObject">
+                  <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.Library.Entity.DisplayName/DisplayName$" />
+                </Binding>
+                <Binding PropertyId="SortableGroupable">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="CanResize">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Width">
+                  <SimpleValue Type="xsd://string" Value="Auto" />
+                </Binding>
+                <Binding PropertyId="PropertyName">
+                  <SimpleValue Type="xsd://string" Value="DisplayName" />
+                </Binding>
+                <Binding PropertyId="XPath">
+                  <SimpleValue Type="xsd://string" Value="$Object/PropertyCollection[Name='DisplayName']$" />
+                </Binding>
+                <Binding PropertyId="SourceType">
+                  <SimpleValue Type="xsd://string" Value="ManagedEntity" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+          <Binding PropertyId="SortedColumns">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataCollectionViewColumn[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataCollectionViewColumn">
+                <Binding PropertyId="HeaderDisplayObject">
+                  <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.Library.Entity.DisplayName/DisplayName$" />
+                </Binding>
+                <Binding PropertyId="SortDirection">
+                  <SimpleValue Type="xsd://string" Value="Ascending" />
+                </Binding>
+                <Binding PropertyId="PropertyName">
+                  <SimpleValue Type="xsd://string" Value="DisplayName" />
+                </Binding>
+                <Binding PropertyId="XPath">
+                  <SimpleValue Type="xsd://string" Value="$Object/PropertyCollection[Name='DisplayName']$" />
+                </Binding>
+                <Binding PropertyId="SourceType">
+                  <SimpleValue Type="xsd://string" Value="ManagedEntity" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+        </Bindings>
+      </ComponentOverride>
+      <ComponentOverride ID="UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformanceOverride" TypeID="UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformance" Context="/InsideTechnologies.QNAP!UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.GridLayout/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.GridLayout/UIGeneratedRegion_084c265a6c3245fe8cd434ea3a94d5ec/Microsoft.SystemCenter.Visualization.Library!ComposedRegion/InsideTechnologies.QNAP!UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformance/">
+        <Bindings>
+          <Binding PropertyId="PerformanceObjectCounters">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.DataSourceTypes/PerformanceDataSeriesQueryType[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.DataSourceTypes/PerformanceDataSeriesQueryType">
+                <Binding PropertyId="PerformanceObjectName">
+                  <SimpleValue Type="xsd://string" Value="Snmp Performance Object" />
+                </Binding>
+                <Binding PropertyId="PerformanceCounterName">
+                  <SimpleValue Type="xsd://string" Value=".1.3.6.1.4.1.24681.1.3.1.0" />
+                </Binding>
+                <Binding PropertyId="PerformanceCounterInstanceName">
+                  <SimpleValue Type="xsd://string" Value="" />
+                </Binding>
+                <Binding PropertyId="ManagedEntityIds">
+                  <ComplexValueCollection Type="mpinstance://System.Library!System.Entity[]">
+                    <ComplexValue Type="mpinstance://System.Library!System.Entity">
+                      <Binding PropertyId="Id">
+                        <SimpleValue Type="xsd://string" Value="d1c2d30f-9228-3191-864e-e91d29013ed1" />
+                      </Binding>
+                    </ComplexValue>
+                  </ComplexValueCollection>
+                </Binding>
+                <Binding PropertyId="DatapointReduction">
+                  <SimpleValue Type="xsd://string" Value="Average" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+          <Binding PropertyId="DateRange">
+            <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ChartDataTypes/DynamicDateTimeRange">
+              <Binding PropertyId="StartPoint">
+                <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ChartDataTypes/DateTimeRangePart">
+                  <Binding PropertyId="BaseDateTime">
+                    <SimpleValue Type="xsd://string" Value="Present" />
+                  </Binding>
+                  <Binding PropertyId="Offset">
+                    <SimpleValue Type="xsd://integer" Value="-7" />
+                  </Binding>
+                  <Binding PropertyId="OffsetType">
+                    <SimpleValue Type="xsd://string" Value="Day" />
+                  </Binding>
+                </ComplexValue>
+              </Binding>
+              <Binding PropertyId="EndPoint">
+                <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ChartDataTypes/DateTimeRangePart">
+                  <Binding PropertyId="BaseDateTime">
+                    <SimpleValue Type="xsd://string" Value="Present" />
+                  </Binding>
+                  <Binding PropertyId="Offset">
+                    <SimpleValue Type="xsd://integer" Value="0" />
+                  </Binding>
+                  <Binding PropertyId="OffsetType">
+                    <SimpleValue Type="xsd://string" Value="Day" />
+                  </Binding>
+                </ComplexValue>
+              </Binding>
+            </ComplexValue>
+          </Binding>
+          <Binding PropertyId="Axes">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ChartDataTypes/LinearAxis[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ChartDataTypes/LinearAxis">
+                <Binding PropertyId="Minimum">
+                  <SimpleValue Type="xsd://integer" Value="0" />
+                </Binding>
+                <Binding PropertyId="Maximum">
+                  <SimpleValue Type="xsd://integer" Value="100" />
+                </Binding>
+                <Binding PropertyId="AutoCalculate">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Orientation">
+                  <SimpleValue Type="xsd://string" Value="Y" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+          <Binding PropertyId="ShowLegend">
+            <SimpleValue Type="xsd://boolean" Value="True" />
+          </Binding>
+          <Binding PropertyId="LegendColumns">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn">
+                <Binding PropertyId="HeaderDisplayObject">
+                  <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Configuration.Library!Microsoft.SystemCenter.Visualization.Library.PerfChartConfigColumns.Target/DisplayName$" />
+                </Binding>
+                <Binding PropertyId="SortableGroupable">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="CanResize">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Width">
+                  <SimpleValue Type="xsd://string" Value="Auto" />
+                </Binding>
+                <Binding PropertyId="PropertyName">
+                  <SimpleValue Type="xsd://string" Value="DisplayName" />
+                </Binding>
+              </ComplexValue>
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn">
+                <Binding PropertyId="HeaderDisplayObject">
+                  <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Configuration.Library!Microsoft.SystemCenter.Visualization.Library.PerfChartConfigColumns.Path/DisplayName$" />
+                </Binding>
+                <Binding PropertyId="SortableGroupable">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="CanResize">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Width">
+                  <SimpleValue Type="xsd://string" Value="*" />
+                </Binding>
+                <Binding PropertyId="PropertyName">
+                  <SimpleValue Type="xsd://string" Value="Path" />
+                </Binding>
+              </ComplexValue>
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn">
+                <Binding PropertyId="HeaderDisplayObject">
+                  <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Configuration.Library!Microsoft.SystemCenter.Visualization.Library.PerfChartConfigColumns.LastValue/DisplayName$" />
+                </Binding>
+                <Binding PropertyId="SortableGroupable">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="CanResize">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Width">
+                  <SimpleValue Type="xsd://string" Value="*" />
+                </Binding>
+                <Binding PropertyId="PropertyName">
+                  <SimpleValue Type="xsd://string" Value="LastValue" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+        </Bindings>
+      </ComponentOverride>
+      <ComponentOverride ID="UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformanceOverride" TypeID="UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformance" Context="/InsideTechnologies.QNAP!UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.GridLayout/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.GridLayout/UIGeneratedRegion_5436c03b0afd495c86ee0261b9e020c5/Microsoft.SystemCenter.Visualization.Library!ComposedRegion/InsideTechnologies.QNAP!UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformance/">
+        <Bindings>
+          <Binding PropertyId="PerformanceObjectCounters">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.DataSourceTypes/PerformanceDataSeriesQueryType[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.DataSourceTypes/PerformanceDataSeriesQueryType">
+                <Binding PropertyId="PerformanceObjectName">
+                  <SimpleValue Type="xsd://string" Value="Snmp Performance Object" />
+                </Binding>
+                <Binding PropertyId="PerformanceCounterName">
+                  <SimpleValue Type="xsd://string" Value=".1.3.6.1.4.1.24681.1.3.3.0" />
+                </Binding>
+                <Binding PropertyId="PerformanceCounterInstanceName">
+                  <SimpleValue Type="xsd://string" Value="" />
+                </Binding>
+                <Binding PropertyId="ManagedEntityIds">
+                  <ComplexValueCollection Type="mpinstance://System.Library!System.Entity[]">
+                    <ComplexValue Type="mpinstance://System.Library!System.Entity">
+                      <Binding PropertyId="Id">
+                        <SimpleValue Type="xsd://string" Value="d1c2d30f-9228-3191-864e-e91d29013ed1" />
+                      </Binding>
+                    </ComplexValue>
+                  </ComplexValueCollection>
+                </Binding>
+                <Binding PropertyId="DatapointReduction">
+                  <SimpleValue Type="xsd://string" Value="Average" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+          <Binding PropertyId="DateRange">
+            <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ChartDataTypes/DynamicDateTimeRange">
+              <Binding PropertyId="StartPoint">
+                <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ChartDataTypes/DateTimeRangePart">
+                  <Binding PropertyId="BaseDateTime">
+                    <SimpleValue Type="xsd://string" Value="Present" />
+                  </Binding>
+                  <Binding PropertyId="Offset">
+                    <SimpleValue Type="xsd://integer" Value="-7" />
+                  </Binding>
+                  <Binding PropertyId="OffsetType">
+                    <SimpleValue Type="xsd://string" Value="Day" />
+                  </Binding>
+                </ComplexValue>
+              </Binding>
+              <Binding PropertyId="EndPoint">
+                <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ChartDataTypes/DateTimeRangePart">
+                  <Binding PropertyId="BaseDateTime">
+                    <SimpleValue Type="xsd://string" Value="Present" />
+                  </Binding>
+                  <Binding PropertyId="Offset">
+                    <SimpleValue Type="xsd://integer" Value="0" />
+                  </Binding>
+                  <Binding PropertyId="OffsetType">
+                    <SimpleValue Type="xsd://string" Value="Day" />
+                  </Binding>
+                </ComplexValue>
+              </Binding>
+            </ComplexValue>
+          </Binding>
+          <Binding PropertyId="Axes">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ChartDataTypes/LinearAxis[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ChartDataTypes/LinearAxis">
+                <Binding PropertyId="Minimum">
+                  <SimpleValue Type="xsd://integer" Value="0" />
+                </Binding>
+                <Binding PropertyId="Maximum">
+                  <SimpleValue Type="xsd://integer" Value="100" />
+                </Binding>
+                <Binding PropertyId="AutoCalculate">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Orientation">
+                  <SimpleValue Type="xsd://string" Value="Y" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+          <Binding PropertyId="ShowLegend">
+            <SimpleValue Type="xsd://boolean" Value="True" />
+          </Binding>
+          <Binding PropertyId="LegendColumns">
+            <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn[]">
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn">
+                <Binding PropertyId="HeaderDisplayObject">
+                  <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Configuration.Library!Microsoft.SystemCenter.Visualization.Library.PerfChartConfigColumns.Target/DisplayName$" />
+                </Binding>
+                <Binding PropertyId="SortableGroupable">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="CanResize">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Width">
+                  <SimpleValue Type="xsd://string" Value="Auto" />
+                </Binding>
+                <Binding PropertyId="PropertyName">
+                  <SimpleValue Type="xsd://string" Value="DisplayName" />
+                </Binding>
+              </ComplexValue>
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn">
+                <Binding PropertyId="HeaderDisplayObject">
+                  <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Configuration.Library!Microsoft.SystemCenter.Visualization.Library.PerfChartConfigColumns.Path/DisplayName$" />
+                </Binding>
+                <Binding PropertyId="SortableGroupable">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="CanResize">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Width">
+                  <SimpleValue Type="xsd://string" Value="*" />
+                </Binding>
+                <Binding PropertyId="PropertyName">
+                  <SimpleValue Type="xsd://string" Value="Path" />
+                </Binding>
+              </ComplexValue>
+              <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn">
+                <Binding PropertyId="HeaderDisplayObject">
+                  <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Configuration.Library!Microsoft.SystemCenter.Visualization.Library.PerfChartConfigColumns.LastValue/DisplayName$" />
+                </Binding>
+                <Binding PropertyId="SortableGroupable">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="CanResize">
+                  <SimpleValue Type="xsd://boolean" Value="True" />
+                </Binding>
+                <Binding PropertyId="Width">
+                  <SimpleValue Type="xsd://string" Value="*" />
+                </Binding>
+                <Binding PropertyId="PropertyName">
+                  <SimpleValue Type="xsd://string" Value="LastValue" />
+                </Binding>
+              </ComplexValue>
+            </ComplexValueCollection>
+          </Binding>
+        </Bindings>
+      </ComponentOverride>
+    </ComponentOverrides>
+    <ComponentImplementations>
+      <ComponentImplementation ID="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboardImplementation" Accessibility="Public" TypeId="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard" Platform="Wpf, Silverlight">
+        <Composite>
+          <Base />
+        </Composite>
+      </ComponentImplementation>
+      <ComponentImplementation ID="UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceStateImplementation" Accessibility="Public" TypeId="UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceState" Platform="Wpf, Silverlight">
+        <Composite>
+          <Base />
+        </Composite>
+      </ComponentImplementation>
+      <ComponentImplementation ID="UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformanceImplementation" Accessibility="Public" TypeId="UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformance" Platform="Wpf, Silverlight">
+        <Composite>
+          <Base />
+        </Composite>
+      </ComponentImplementation>
+      <ComponentImplementation ID="UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformanceImplementation" Accessibility="Public" TypeId="UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformance" Platform="Wpf, Silverlight">
+        <Composite>
+          <Base />
+        </Composite>
+      </ComponentImplementation>
+    </ComponentImplementations>
   </Presentation>
   <LanguagePacks>
     <LanguagePack ID="ENU" IsDefault="true">
       <DisplayStrings>
         <DisplayString ElementID="InsideTechnologies.QNAP">
-          <Name>Inside Technologies - QNAP Storage</Name>
-          <Description>Custom Management Pack for QNAP Storage Devices created by Silvio Di Benedetto. For feedback and support visit Inside Technologies web site.</Description>
-        </DisplayString>
-        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP">
-          <Name>QNAP Devices</Name>
-        </DisplayString>
-        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Processor">
-          <Name>QNAP Processor</Name>
-        </DisplayString>
-		<DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Memory">
-          <Name>QNAP Memory</Name>
-        </DisplayString>
-		<DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Interface">
-          <Name>QNAP Network Interface</Name>
+          <Name>Inside Technologies - QNAP Devices Management Pack</Name>
+          <Description>Management Pack to monitor and manage QNAP Storage Devices, created by Silvio Di Benedetto. For feedback and support visit Inside Technologies portal on GitHub.</Description>
         </DisplayString>
         <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Folder">
           <Name>Inside Technologies - QNAP Devices</Name>
         </DisplayString>
-        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.StateView">
-          <Name>Storage Devices State</Name>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP">
+          <Name>QNAP Devices</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP" SubElementID="Disks">
+          <Name>Disk Number</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Processor">
+          <Name>QNAP Processor</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Memory">
+          <Name>QNAP Memory</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Interface">
+          <Name>QNAP Network Interface</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Disk">
+          <Name>QNAP Disk</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Disk" SubElementID="DisksModel">
+          <Name>Disk Model</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Disk" SubElementID="DisksCapacity">
+          <Name>Disk Capacity</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.State.View">
+          <Name>QNAP State</Name>
           <Description>QNAP Device State View</Description>
         </DisplayString>
         <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ActiveAlerts.View">
@@ -1290,10 +1966,10 @@
         <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.Monitor">
           <Name>QNAP CPU Usage</Name>
         </DisplayString>
-		<DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.Monitor">
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.Monitor">
           <Name>QNAP CPU Temperature</Name>
         </DisplayString>
-		<DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.Monitor">
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.Monitor">
           <Name>QNAP Memory Usage</Name>
         </DisplayString>
         <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorLoad.Rule">
@@ -1315,7 +1991,7 @@
         <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.Monitor" SubElementID="UnderThreshold">
           <Name>First Probe Raised</Name>
         </DisplayString>
-		<DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.AlertMessage">
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.AlertMessage">
           <Name>QNAP Processor Utilization</Name>
           <Description>Processor utilization for device {0} is over the threshold. Processor utilization is {1} %</Description>
         </DisplayString>
@@ -1359,81 +2035,115 @@
         <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.NetworkReceived.Rule">
           <Name>QNAP Network Received Usage</Name>
         </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Disk.State.View">
+          <Name>Disk State</Name>
+        </DisplayString>
+        <DisplayString ElementID="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboard">
+          <Name>QNAP Dashboard</Name>
+        </DisplayString>
+        <DisplayString ElementID="UIGenerated_a7b7e99d99994467aef2d07bbfbed586_QNAPDashboardOverride">
+          <Name>QNAP Dashboard</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Group">
+          <Name>QNAP Devices</Name>
+        </DisplayString>
+        <DisplayString ElementID="InsideTechnologies.NetworkDevice.QNAP.Group.DiscoveryRule">
+          <Name>Populate QNAP Devices</Name>
+          <Description>This discovery rule populates the group 'QNAP Devices'</Description>
+        </DisplayString>
+        <DisplayString ElementID="UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceState">
+          <Name>Device State</Name>
+        </DisplayString>
+        <DisplayString ElementID="UIGenerated_0cc17dd8c9fe4eb1872bf0d5629ebb8a_DeviceStateOverride">
+          <Name>Device State</Name>
+        </DisplayString>
+        <DisplayString ElementID="UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformance">
+          <Name>CPU Performance</Name>
+        </DisplayString>
+        <DisplayString ElementID="UIGenerated_62c0a35926904212ba6fa840a5f26a80_CPUPerformanceOverride">
+          <Name>CPU Performance</Name>
+        </DisplayString>
+        <DisplayString ElementID="UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformance">
+          <Name>Memory Performance</Name>
+        </DisplayString>
+        <DisplayString ElementID="UIGenerated_3c59170b1af74fabaa2c33a69a26b211_MemoryPerformanceOverride">
+          <Name>Memory Performance</Name>
+        </DisplayString>
       </DisplayStrings>
-	  <KnowledgeArticles>
-	   <KnowledgeArticle ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.Monitor" Visible="true">
+      <KnowledgeArticles>
+        <KnowledgeArticle ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorUsage.Monitor" Visible="true">
           <MamlContent>
             <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
               <maml:title>Summary</maml:title>
               <maml:para>This Management Pack monitors QNAP Storage.</maml:para>
-              <maml:para>Devices have to be discovered first through the built-in SCOM 2012 R2 Network Monitoring.</maml:para>
-			  <maml:para>To enable the QNAP device monitoring the device must be discovered using the standard Operations Manager SNMP Discovery process.</maml:para>
+              <maml:para>Devices have to be discovered first through the built-in SCOM Network Monitoring.</maml:para>
+              <maml:para>To enable the QNAP device monitoring the device must be discovered using the standard Operations Manager SNMP Discovery process.</maml:para>
               <maml:para>Performance data (CPU, Memory and Network) is collected for QNAP Devices.</maml:para>
               <maml:para>The Management Pack discovers QNAP and monitors their state.</maml:para>
               <maml:para>
                 <maml:navigationLink>
-                  <maml:linkText>QNAP MP Project</maml:linkText>
+                  <maml:linkText>Inside Technologies Community Project</maml:linkText>
                   <maml:uri href="http://www.insidetechnologies.eu/en/community-project/" />
                 </maml:navigationLink>
               </maml:para>
             </maml:section>
-			<maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
               <maml:title>Causes</maml:title>
               <maml:para>If the alert is in Health state means that the CPU Usage of QNAP is under 80%.</maml:para>
               <maml:para>If the alert is in Critical state means that the CPU Usage of QNAP is over 80%. Maybe there are some process that using the CPU.</maml:para>
-              <maml:para></maml:para>
+              <maml:para />
             </maml:section>
           </MamlContent>
         </KnowledgeArticle>
-		<KnowledgeArticle ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.Monitor" Visible="true">
+        <KnowledgeArticle ElementID="InsideTechnologies.NetworkDevice.QNAP.ProcessorTemperature.Monitor" Visible="true">
           <MamlContent>
             <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
               <maml:title>Summary</maml:title>
               <maml:para>This Management Pack monitors QNAP Storage.</maml:para>
-              <maml:para>Devices have to be discovered first through the built-in SCOM 2012 R2 Network Monitoring.</maml:para>
-			  <maml:para>To enable the QNAP device monitoring the device must be discovered using the standard Operations Manager SNMP Discovery process.</maml:para>
+              <maml:para>Devices have to be discovered first through the built-in SCOM Network Monitoring.</maml:para>
+              <maml:para>To enable the QNAP device monitoring the device must be discovered using the standard Operations Manager SNMP Discovery process.</maml:para>
               <maml:para>Performance data (CPU, Memory and Network) is collected for QNAP Devices.</maml:para>
               <maml:para>The Management Pack discovers QNAP and monitors their state.</maml:para>
               <maml:para>
                 <maml:navigationLink>
-                  <maml:linkText>QNAP MP Project</maml:linkText>
+                  <maml:linkText>Inside Technologies Community Project</maml:linkText>
                   <maml:uri href="http://www.insidetechnologies.eu/en/community-project/" />
                 </maml:navigationLink>
               </maml:para>
             </maml:section>
-			<maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
               <maml:title>Causes</maml:title>
               <maml:para>If the alert is in Health state means that the CPU Temperature of QNAP is under 50 degrees.</maml:para>
               <maml:para>If the alert is in Critical state means that the CPU Temperature of QNAP is equal or over 50 degrees. Check the room temperature and if the fun works.</maml:para>
-              <maml:para></maml:para>
+              <maml:para />
             </maml:section>
           </MamlContent>
         </KnowledgeArticle>
-		<KnowledgeArticle ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.Monitor" Visible="true">
+        <KnowledgeArticle ElementID="InsideTechnologies.NetworkDevice.QNAP.MemoryUsage.Monitor" Visible="true">
           <MamlContent>
             <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
               <maml:title>Summary</maml:title>
               <maml:para>This Management Pack monitors QNAP Storage.</maml:para>
-              <maml:para>Devices have to be discovered first through the built-in SCOM 2012 R2 Network Monitoring.</maml:para>
-			  <maml:para>To enable the QNAP device monitoring the device must be discovered using the standard Operations Manager SNMP Discovery process.</maml:para>
+              <maml:para>Devices have to be discovered first through the built-in SCOM Network Monitoring.</maml:para>
+              <maml:para>To enable the QNAP device monitoring the device must be discovered using the standard Operations Manager SNMP Discovery process.</maml:para>
               <maml:para>Performance data (CPU, Memory and Network) is collected for QNAP Devices.</maml:para>
               <maml:para>The Management Pack discovers QNAP and monitors their state.</maml:para>
               <maml:para>
                 <maml:navigationLink>
-                  <maml:linkText>QNAP MP Project</maml:linkText>
+                  <maml:linkText>Inside Technologies Community Project</maml:linkText>
                   <maml:uri href="http://www.insidetechnologies.eu/en/community-project/" />
                 </maml:navigationLink>
               </maml:para>
             </maml:section>
-			<maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
+            <maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10">
               <maml:title>Causes</maml:title>
               <maml:para>If the alert is in Health state means that the Memory Usage of QNAP is equal or over 400MB.</maml:para>
               <maml:para>If the alert is in Critical state means that the Memory Usage of QNAP is less 400MB.</maml:para>
-              <maml:para></maml:para>
+              <maml:para />
             </maml:section>
           </MamlContent>
         </KnowledgeArticle>
       </KnowledgeArticles>
-	</LanguagePack>
+    </LanguagePack>
   </LanguagePacks>
 </ManagementPack>
