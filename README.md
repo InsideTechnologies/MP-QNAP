@@ -1,6 +1,4 @@
-# MP-QNAP
-
-Welcome to QNAP Storage Management Pack project
+# Welcome to QNAP Management Pack project
 
 This free Management Pack for System Center Operations Manager allows you to manage QNAP Storage devices. The project is open and everyone can improve the MP. For more information you send a feedback from our web page: www.insidetechnologies.eu.
 
@@ -8,7 +6,7 @@ What’s New in build 1.0.1.2017:
 
 - Dashboard View
 - New Device Group
-- New building convention
+- New build number convention
 
 What’s New in build 1.0.0.1:
 
